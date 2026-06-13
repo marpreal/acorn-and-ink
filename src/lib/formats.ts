@@ -54,3 +54,12 @@ export function isFormat(v: unknown): v is FormatKey {
 export function isStatus(v: unknown): v is StatusKey {
   return typeof v === "string" && STATUS_KEYS.includes(v as StatusKey);
 }
+
+export function shelvesHref(opts?: { status?: StatusKey; format?: FormatKey; edit?: string }) {
+  const params = new URLSearchParams();
+  if (opts?.status) params.set("status", opts.status);
+  if (opts?.format) params.set("format", opts.format);
+  if (opts?.edit) params.set("edit", opts.edit);
+  const q = params.toString();
+  return q ? `/shelves?${q}` : "/shelves";
+}

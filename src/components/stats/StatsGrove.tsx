@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { FORMATS, STATUSES } from "@/lib/formats";
+import { FORMATS, STATUSES, shelvesHref } from "@/lib/formats";
 import type { ReadingStats } from "@/lib/stats";
 
 function CountUp({ value, duration = 1100 }: { value: number; duration?: number }) {
@@ -29,10 +30,10 @@ export default function StatsGrove({ stats }: { stats: ReadingStats }) {
   const totalLib = Math.max(1, stats.total);
 
   const stones = [
-    { glyph: "🌲", label: "Read all-time", value: stats.readAllTime },
-    { glyph: "📚", label: "Tomes in all", value: stats.total },
-    { glyph: "🌿", label: "Reading now", value: stats.currentlyReading },
-    { glyph: "🕯️", label: "On the wishlist", value: stats.wishlisted },
+    { glyph: "🌲", label: "Read all-time", value: stats.readAllTime, href: shelvesHref({ status: "read" }) },
+    { glyph: "📚", label: "Tomes in all", value: stats.total, href: shelvesHref() },
+    { glyph: "🌿", label: "Reading now", value: stats.currentlyReading, href: shelvesHref({ status: "reading" }) },
+    { glyph: "🕯️", label: "On the wishlist", value: stats.wishlisted, href: shelvesHref({ status: "want" }) },
   ];
 
   return (
@@ -91,13 +92,13 @@ export default function StatsGrove({ stats }: { stats: ReadingStats }) {
       {/* STONES */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stones.map((s, i) => (
-          <div key={s.label} className="glass rounded-2xl p-5 anim-grow" style={{ animationDelay: `${i * 60}ms` }}>
+          <Link key={s.label} href={s.href} className="glass rounded-2xl p-5 anim-grow transition hover:-translate-y-0.5" style={{ animationDelay: `${i * 60}ms` }}>
             <div className="text-3xl">{s.glyph}</div>
             <div className="font-display mt-1" style={{ fontSize: "2.2rem", color: "var(--color-glow)", lineHeight: 1 }}>
               <CountUp value={s.value} />
             </div>
             <div className="text-sm mt-1" style={{ color: "var(--color-moss-200)" }}>{s.label}</div>
-          </div>
+          </Link>
         ))}
       </section>
 
@@ -130,7 +131,7 @@ export default function StatsGrove({ stats }: { stats: ReadingStats }) {
             {STATUSES.map((s) => {
               const c = stats.byStatus[s.key] ?? 0;
               return (
-                <div key={s.key}>
+                <Link key={s.key} href={shelvesHref({ status: s.key })} className="block rounded-lg transition hover:bg-white/5 -mx-1 px-1 py-0.5">
                   <div className="flex justify-between text-sm mb-1">
                     <span style={{ color: "var(--color-moss-200)" }}>{s.glyph} {s.label}</span>
                     <span style={{ color: s.accent }}>{c}</span>
@@ -139,7 +140,7 @@ export default function StatsGrove({ stats }: { stats: ReadingStats }) {
                     <motion.div initial={{ width: 0 }} animate={{ width: `${(c / totalLib) * 100}%` }} transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                       className="h-full rounded-full" style={{ background: s.accent }} />
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

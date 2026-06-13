@@ -3,7 +3,7 @@ import { BookMarked, Library, ScrollText, Sprout } from "lucide-react";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getReadingStats } from "@/lib/stats";
-import { formatMeta, statusMeta } from "@/lib/formats";
+import { formatMeta, shelvesHref, statusMeta } from "@/lib/formats";
 
 function greeting() {
   const h = new Date().getHours();
@@ -14,10 +14,10 @@ function greeting() {
 }
 
 const stones = (s: Awaited<ReturnType<typeof getReadingStats>>) => [
-  { glyph: "🍄", label: `Read in ${s.year}`, value: s.readThisYear, accent: "var(--color-toadstool-bright)" },
-  { glyph: "🌿", label: "Reading now", value: s.currentlyReading, accent: "var(--color-moss-300)" },
-  { glyph: "🕯️", label: "On the wishlist", value: s.wishlisted, accent: "var(--color-candle)" },
-  { glyph: "📚", label: "Tomes in all", value: s.total, accent: "var(--color-wisp)" },
+  { glyph: "🍄", label: `Read in ${s.year}`, value: s.readThisYear, accent: "var(--color-toadstool-bright)", href: shelvesHref({ status: "read" }) },
+  { glyph: "🌿", label: "Reading now", value: s.currentlyReading, accent: "var(--color-moss-300)", href: shelvesHref({ status: "reading" }) },
+  { glyph: "🕯️", label: "On the wishlist", value: s.wishlisted, accent: "var(--color-candle)", href: shelvesHref({ status: "want" }) },
+  { glyph: "📚", label: "Tomes in all", value: s.total, accent: "var(--color-wisp)", href: shelvesHref() },
 ];
 
 const paths = [
@@ -52,13 +52,13 @@ export default async function DashboardPage() {
 
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stones(stats).map((st, i) => (
-          <div key={st.label} className="glass rounded-2xl p-5 anim-grow" style={{ animationDelay: `${i * 60}ms` }}>
+          <Link key={st.label} href={st.href} className="glass rounded-2xl p-5 anim-grow transition hover:-translate-y-0.5" style={{ animationDelay: `${i * 60}ms` }}>
             <div className="text-3xl">{st.glyph}</div>
             <div className="font-display mt-1" style={{ fontSize: "2.4rem", color: st.accent, lineHeight: 1 }}>
               {st.value}
             </div>
             <div className="text-sm mt-1" style={{ color: "var(--color-moss-200)" }}>{st.label}</div>
-          </div>
+          </Link>
         ))}
       </section>
 
@@ -81,7 +81,7 @@ export default async function DashboardPage() {
             <div className="glass rounded-2xl p-5">
               <div className="flex items-center justify-between">
                 <h2 className="font-serif-d text-xl" style={{ color: "var(--color-vellum)" }}>🌿 Currently reading</h2>
-                <Link href="/shelves" className="text-sm lantern-link">all shelves →</Link>
+                <Link href={shelvesHref({ status: "reading" })} className="text-sm lantern-link">all reading →</Link>
               </div>
               {reading.length === 0 ? (
                 <p className="mt-3 text-sm" style={{ color: "var(--color-moss-300)" }}>
@@ -90,12 +90,14 @@ export default async function DashboardPage() {
               ) : (
                 <ul className="mt-3 flex flex-col gap-2">
                   {reading.map((b) => (
-                    <li key={b.id} className="flex items-center gap-3 rounded-xl px-3 py-2" style={{ background: "rgba(255,255,255,0.03)" }}>
-                      <span className="text-xl">{formatMeta(b.format).glyph}</span>
-                      <div className="min-w-0">
-                        <div className="truncate" style={{ color: "var(--color-vellum)" }}>{b.title}</div>
-                        <div className="text-xs truncate" style={{ color: "var(--color-moss-300)" }}>{b.author ?? "unknown hand"}</div>
-                      </div>
+                    <li key={b.id}>
+                      <Link href={`/books/${b.id}`} className="flex items-center gap-3 rounded-xl px-3 py-2 transition hover:bg-white/5" style={{ background: "rgba(255,255,255,0.03)" }}>
+                        <span className="text-xl">{formatMeta(b.format).glyph}</span>
+                        <div className="min-w-0">
+                          <div className="truncate" style={{ color: "var(--color-vellum)" }}>{b.title}</div>
+                          <div className="text-xs truncate" style={{ color: "var(--color-moss-300)" }}>{b.author ?? "unknown hand"}</div>
+                        </div>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -106,10 +108,12 @@ export default async function DashboardPage() {
               <h2 className="font-serif-d text-xl" style={{ color: "var(--color-vellum)" }}>🪶 Lately gathered</h2>
               <ul className="mt-3 flex flex-wrap gap-2">
                 {recent.map((b) => (
-                  <li key={b.id} className="chip" style={{ cursor: "default" }}>
-                    <span>{formatMeta(b.format).glyph}</span>
-                    <span className="truncate max-w-[12rem]">{b.title}</span>
-                    <span style={{ color: statusMeta(b.status).accent }}>{statusMeta(b.status).glyph}</span>
+                  <li key={b.id}>
+                    <Link href={`/books/${b.id}`} className="chip transition hover:-translate-y-0.5">
+                      <span>{formatMeta(b.format).glyph}</span>
+                      <span className="truncate max-w-[12rem]">{b.title}</span>
+                      <span style={{ color: statusMeta(b.status).accent }}>{statusMeta(b.status).glyph}</span>
+                    </Link>
                   </li>
                 ))}
               </ul>

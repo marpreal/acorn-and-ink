@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
 import { Plus, Search } from "lucide-react";
-import { FORMATS, STATUSES, type FormatKey, type StatusKey } from "@/lib/formats";
+import { FORMATS, STATUSES, isFormat, isStatus, type FormatKey, type StatusKey } from "@/lib/formats";
 import type { BookDTO } from "@/lib/book-dto";
 import BookCard from "./BookCard";
 import BookForm from "./BookForm";
@@ -28,6 +28,12 @@ export default function ShelvesView({ books: initialBooks }: { books: BookDTO[] 
   useEffect(() => { setBooks(initialBooks); }, [initialBooks]);
 
   useEffect(() => {
+    const statusParam = searchParams.get("status");
+    if (isStatus(statusParam)) setStatus(statusParam);
+
+    const formatParam = searchParams.get("format");
+    if (isFormat(formatParam)) setFmt(formatParam);
+
     const editId = searchParams.get("edit");
     if (!editId) return;
     const book = initialBooks.find((b) => b.id === editId);
