@@ -78,3 +78,64 @@ export async function deleteNote(id: string): Promise<JournalResult> {
   rev();
   return { ok: true };
 }
+
+// ── Diary (spell-book entries) ───────────────────────────
+export type EntryInput = {
+  title?: string | null;
+  content: string;
+  mood?: string | null;
+  entryDate?: string | null; // "YYYY-MM-DD"
+};
+
+const entrySchema = z.object({
+  title: z.string().trim().max(160).nullish(),
+  content: z.string().trim().min(1, "An empty page holds no spell.").max(20000),
+  mood: z.string().trim().max(24).nullish(),
+  entryDate: z.string().nullish(),
+});
+
+function toEntryDate(s?: string | null): Date {
+  if (!s) return new Date();
+  const d = new Date(`${s}T12:00:00`);
+  return isNaN(d.getTime()) ? new Date() : d;
+}
+
+async function ownsEntry(id: string, userId: string) {
+  const row = await prisma.diaryEntry.findUnique({ where: { id }, select: { userId: true } });
+  return !!row && row.userId === userId;
+}
+
+export async function addEntry(input: EntryInput): Promise<JournalResult> {
+  const userId = await getUserId();
+  if (!userId) return { ok: false, error: "You must be inside the library." };
+  const parsed = entrySchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message };
+  const { title, content, mood, entryDate } = parsed.data;
+  await prisma.diaryEntry.create({
+    data: { userId, title: title ?? null, content, mood: mood ?? null, entryDate: toEntryDate(entryDate) },
+  });
+  rev();
+  return { ok: true };
+}
+
+export async function updateEntry(id: string, input: EntryInput): Promise<JournalResult> {
+  const userId = await getUserId();
+  if (!userId || !(await ownsEntry(id, userId))) return { ok: false, error: "Not your page." };
+  const parsed = entrySchema.safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message };
+  const { title, content, mood, entryDate } = parsed.data;
+  await prisma.diaryEntry.update({
+    where: { id },
+    data: { title: title ?? null, content, mood: mood ?? null, entryDate: toEntryDate(entryDate) },
+  });
+  rev();
+  return { ok: true };
+}
+
+export async function deleteEntry(id: string): Promise<JournalResult> {
+  const userId = await getUserId();
+  if (!userId || !(await ownsEntry(id, userId))) return { ok: false, error: "Not your page." };
+  await prisma.diaryEntry.delete({ where: { id } });
+  rev();
+  return { ok: true };
+}

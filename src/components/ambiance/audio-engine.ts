@@ -25,6 +25,9 @@ export class AudioEngine {
   musicVolume = 0.45;
   sfxOn = true;
 
+  /** Fired whenever the current track or play state changes (for the React UI). */
+  onChange: (() => void) | null = null;
+
   // ── Web Audio (SFX) ───────────────────────────────────────────────
   private ensureCtx(): AudioContext | null {
     if (typeof window === "undefined") return null;
@@ -133,11 +136,19 @@ export class AudioEngine {
       volume: this.musicVolume,
       autoplay,
       onend: () => this.next(),
+      onplay: () => this.onChange?.(),
+      onpause: () => this.onChange?.(),
     });
+    this.onChange?.();
   }
 
   get currentTrack(): TrackInfo | undefined { return TRACKS[this.trackIndex]; }
   get currentIndex(): number { return this.trackIndex; }
+  get playing(): boolean { return !!this.howl?.playing(); }
+
+  position(): number { const p = this.howl?.seek(); return typeof p === "number" ? p : 0; }
+  duration(): number { const d = this.howl?.duration(); return typeof d === "number" ? d : 0; }
+  seekTo(sec: number) { this.howl?.seek(sec); }
 
   setMusicOn(on: boolean) {
     this.musicOn = on;
@@ -147,6 +158,7 @@ export class AudioEngine {
     } else {
       this.howl?.pause();
     }
+    this.onChange?.();
   }
 
   next() { this.loadTrack(this.trackIndex + 1, this.musicOn); }

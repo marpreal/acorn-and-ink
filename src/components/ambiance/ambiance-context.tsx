@@ -87,6 +87,12 @@ export function AmbianceProvider({ children }: { children: React.ReactNode }) {
     };
   }, [engine]);
 
+  // keep React in step with the engine (auto-advance to next track, play/pause)
+  useEffect(() => {
+    engine.onChange = () => { setTrackIndex(engine.currentIndex); setMusicOn(engine.musicOn); };
+    return () => { engine.onChange = null; };
+  }, [engine]);
+
   const playSfx = useCallback((name: SfxName) => { engine.playSfx(name); }, [engine]);
 
   const toggleAtmosphere = useCallback(() => setAtmosphereOn((v) => !v), []);

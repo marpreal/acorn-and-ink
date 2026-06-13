@@ -336,3 +336,40 @@ a {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* ── Diary: ancient spell-book pages ── */
+.spell-page {
+  position: relative;
+  background:
+    radial-gradient(140% 120% at 0% 0%, rgba(255, 252, 240, 0.7), transparent 50%),
+    linear-gradient(170deg, var(--color-vellum), var(--color-parchment) 60%, var(--color-parchment-soft));
+  color: #3a2c1a;
+  border-radius: 6px;
+  border: 1px solid rgba(120, 86, 46, 0.5);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 -14px 36px rgba(120, 86, 46, 0.14) inset, 0 18px 40px -24px rgba(0, 0, 0, 0.7);
+}
+.spell-page::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(120, 86, 46, 0.4);
+  border-radius: 3px;
+  pointer-events: none;
+}
+.spell-page::after {
+  content: "❧";
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+  color: rgba(138, 35, 48, 0.35);
+  font-size: 1.1rem;
+}
+.drop-cap::first-letter {
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  line-height: 0.8;
+  float: left;
+  margin: 6px 10px 0 0;
+  color: var(--color-toadstool);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}

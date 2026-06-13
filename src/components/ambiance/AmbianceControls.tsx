@@ -2,10 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import {
-  Sparkles, Music4, Volume2, VolumeX, Play, Pause,
-  SkipForward, SkipBack, Wand2, Moon, X,
-} from "lucide-react";
+import { Sparkles, Wand2, Moon, X } from "lucide-react";
 import { useAmbiance } from "./ambiance-context";
 
 function Toggle({
@@ -42,7 +39,7 @@ export default function AmbianceControls() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="glass rounded-2xl p-4 w-72"
+            className="glass rounded-2xl p-4 w-64"
             role="dialog"
             aria-label="Ambiance settings"
           >
@@ -64,39 +61,9 @@ export default function AmbianceControls() {
                 <Wand2 size={18} /> <span>Whispers &amp; chimes</span>
               </Toggle>
 
-              <div className="rounded-xl px-3 py-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(159,174,100,0.18)" }}>
-                <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-2" style={{ color: "var(--color-moss-200)" }}>
-                    <Music4 size={18} /> Forest music
-                  </span>
-                  <button
-                    onClick={() => { a.toggleMusic(); a.playSfx("tap"); }}
-                    aria-label={a.musicOn ? "Pause music" : "Play music"}
-                    className="btn btn-ember"
-                    style={{ padding: "0.3rem 0.6rem" }}
-                  >
-                    {a.musicOn ? <Pause size={16} /> : <Play size={16} />}
-                  </button>
-                </div>
-
-                <div className="mt-2 text-sm font-hand" style={{ color: "var(--color-glow)", fontSize: "1.1rem" }}>
-                  {a.tracks[a.trackIndex]?.title}
-                </div>
-
-                <div className="mt-2 flex items-center gap-2">
-                  <button onClick={() => { a.prevTrack(); a.playSfx("tap"); }} aria-label="Previous track" className="opacity-80 hover:opacity-100"><SkipBack size={18} /></button>
-                  <button onClick={() => { a.nextTrack(); a.playSfx("tap"); }} aria-label="Next track" className="opacity-80 hover:opacity-100"><SkipForward size={18} /></button>
-                  <div className="flex items-center gap-1 flex-1">
-                    {a.volume > 0 ? <Volume2 size={16} /> : <VolumeX size={16} />}
-                    <input
-                      type="range" min={0} max={1} step={0.01} value={a.volume}
-                      onChange={(e) => a.setVolume(parseFloat(e.target.value))}
-                      aria-label="Music volume"
-                      className="w-full accent-[var(--color-ember)]"
-                    />
-                  </div>
-                </div>
-              </div>
+              <p className="text-xs mt-1" style={{ color: "var(--color-moss-300)" }}>
+                🎶 Forest music lives in the <strong style={{ color: "var(--color-candle)" }}>forest pod</strong>, bottom-left.
+              </p>
 
               {a.reducedMotion && (
                 <p className="text-xs flex items-center gap-1.5 mt-1" style={{ color: "var(--color-moss-300)" }}>
