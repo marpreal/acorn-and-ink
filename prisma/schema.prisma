@@ -1,0 +1,96 @@
+// Acorn & Ink — an enchanted library in the heart of the wood.
+// Postgres (Vercel Postgres / Neon) for synced, deployable storage.
+//   DATABASE_URL = pooled connection (runtime queries)
+//   DIRECT_URL   = direct / non-pooled connection (migrations)
+// format/status are kept as validated strings (portable; no DB enums).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  image        String?
+  bio          String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  books Book[]
+  notes Note[]
+  tasks Task[]
+}
+
+model Book {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title         String
+  author        String?
+  format        String    @default("novel") // novel | manga | comic | other
+  status        String    @default("want")  // want | reading | read | paused | dropped
+  rating        Float? // 0.5 – 5 in half steps (rendered as mushrooms)
+  review        String? // personal long-form review
+
+  coverUrl      String?
+  description   String?
+  publisher     String?
+  series        String?
+  volume        Int?
+  totalVolumes  Int?
+  pageCount     Int?
+  currentPage   Int?
+  isbn          String?
+  olKey         String? // Open Library work/edition key
+  publishedYear Int?
+
+  startedAt     DateTime?
+  finishedAt    DateTime?
+  favorite      Boolean   @default(false)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  notes Note[]
+
+  @@index([userId])
+  @@index([userId, status])
+  @@index([userId, format])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookId    String?
+  book      Book?    @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([bookId])
+}
+
+model Task {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String
+  done      Boolean   @default(false)
+  dueAt     DateTime?
+  sort      Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId])
+}
