@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, Loader2, X } from "lucide-react";
 import { createBook, updateBook, type BookActionState } from "@/app/(grove)/shelves/actions";
@@ -30,10 +30,21 @@ export default function BookForm({
   const [rating, setRating] = useState<number>(book?.rating ?? 0);
   const [more, setMore] = useState(false);
 
+  // Keep the latest onSaved without making it an effect dependency (that was
+  // re-firing the success chime on every parent re-render).
+  const onSavedRef = useRef(onSaved);
+  onSavedRef.current = onSaved;
+  const handledRef = useRef(false);
+
   useEffect(() => {
-    if (state.ok) { sfx("success"); onSaved(); }
-    else if (state.error) sfx("error");
-  }, [state, sfx, onSaved]);
+    if (state.ok && !handledRef.current) {
+      handledRef.current = true;
+      sfx("success");
+      onSavedRef.current();
+    } else if (state.error) {
+      sfx("error");
+    }
+  }, [state, sfx]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };

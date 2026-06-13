@@ -1,0 +1,109 @@
+// Production schema for Vercel — Postgres (Neon), single DATABASE_URL.
+// The Vercel build uses this file:  prisma ... --schema prisma/schema.production.prisma
+// Local dev uses prisma/schema.prisma (SQLite). Keep the models in the two files
+// identical; only the datasource differs.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  image        String?
+  bio          String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  books   Book[]
+  notes   Note[]
+  tasks   Task[]
+  entries DiaryEntry[]
+}
+
+model Book {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title         String
+  author        String?
+  format        String    @default("novel")
+  status        String    @default("want")
+  rating        Float?
+  review        String?
+
+  coverUrl      String?
+  description   String?
+  publisher     String?
+  series        String?
+  volume        Int?
+  totalVolumes  Int?
+  pageCount     Int?
+  currentPage   Int?
+  isbn          String?
+  olKey         String?
+  publishedYear Int?
+
+  startedAt     DateTime?
+  finishedAt    DateTime?
+  favorite      Boolean   @default(false)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  notes Note[]
+
+  @@index([userId])
+  @@index([userId, status])
+  @@index([userId, format])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookId    String?
+  book      Book?    @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([bookId])
+}
+
+model Task {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String
+  done      Boolean   @default(false)
+  dueAt     DateTime?
+  sort      Int       @default(0)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model DiaryEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String?
+  content   String
+  mood      String?
+  entryDate DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, entryDate])
+}

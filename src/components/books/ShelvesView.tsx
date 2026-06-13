@@ -1,8 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion";
+import { AnimatePresence, LayoutGroup } from "framer-motion";
 import { Plus, Search } from "lucide-react";
 import { FORMATS, STATUSES, type FormatKey, type StatusKey } from "@/lib/formats";
 import type { BookDTO } from "@/lib/book-dto";
@@ -12,15 +12,26 @@ import { useSfx } from "@/components/ambiance/ambiance-context";
 
 type SortKey = "recent" | "title" | "rating";
 
-export default function ShelvesView({ books }: { books: BookDTO[] }) {
+export default function ShelvesView({ books: initialBooks }: { books: BookDTO[] }) {
   const router = useRouter();
   const sfx = useSfx();
+  const [books, setBooks] = useState<BookDTO[]>(initialBooks);
   const [query, setQuery] = useState("");
   const [fmt, setFmt] = useState<FormatKey | "all">("all");
   const [status, setStatus] = useState<StatusKey | "all">("all");
   const [sort, setSort] = useState<SortKey>("recent");
   const [formOpen, setFormOpen] = useState(false);
   const [formBook, setFormBook] = useState<BookDTO | null>(null);
+
+  // keep local list in step with the server (after refresh / revalidate)
+  useEffect(() => { setBooks(initialBooks); }, [initialBooks]);
+
+  const onLocalRemove = useCallback((id: string) => {
+    setBooks((prev) => prev.filter((b) => b.id !== id));
+  }, []);
+  const onLocalUpdate = useCallback((id: string, patch: Partial<BookDTO>) => {
+    setBooks((prev) => prev.map((b) => (b.id === id ? { ...b, ...patch } : b)));
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -39,7 +50,7 @@ export default function ShelvesView({ books }: { books: BookDTO[] }) {
 
   const openAdd = () => { sfx("open"); setFormBook(null); setFormOpen(true); };
   const openEdit = (b: BookDTO) => { setFormBook(b); setFormOpen(true); };
-  const onSaved = () => { setFormOpen(false); router.refresh(); };
+  const onSaved = useCallback(() => { setFormOpen(false); router.refresh(); }, [router]);
 
   const shelves = FORMATS.filter((f) => fmt === "all" || f.key === fmt);
   const anyShown = filtered.length > 0;
@@ -56,7 +67,6 @@ export default function ShelvesView({ books }: { books: BookDTO[] }) {
         <button onClick={openAdd} className="btn btn-ember"><Plus size={18} /> Add a book</button>
       </header>
 
-      {/* filters */}
       <div className="glass rounded-2xl p-3 flex flex-col gap-3">
         <div className="flex flex-wrap gap-3 items-center">
           <div className="relative flex-1 min-w-[200px]">
@@ -89,7 +99,6 @@ export default function ShelvesView({ books }: { books: BookDTO[] }) {
         </div>
       </div>
 
-      {/* shelves */}
       {books.length === 0 ? (
         <div className="parchment p-8 text-center">
           <div className="text-5xl mb-2">🌱</div>
@@ -116,11 +125,13 @@ export default function ShelvesView({ books }: { books: BookDTO[] }) {
                     <span className="text-sm" style={{ color: "var(--color-moss-300)" }}>{items.length}</span>
                     <span className="font-hand text-base" style={{ color: "var(--color-moss-400)" }}>· {f.blurb}</span>
                   </div>
-                  <AnimatePresence mode="popLayout">
-                    <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}>
-                      {items.map((b) => <BookCard key={b.id} book={b} onEdit={openEdit} />)}
-                    </div>
-                  </AnimatePresence>
+                  <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}>
+                    <AnimatePresence mode="popLayout">
+                      {items.map((b) => (
+                        <BookCard key={b.id} book={b} onEdit={openEdit} onLocalRemove={onLocalRemove} onLocalUpdate={onLocalUpdate} />
+                      ))}
+                    </AnimatePresence>
+                  </div>
                   <div className="wood-panel mt-3 rounded-b-lg" style={{ height: 12 }} />
                 </section>
               );

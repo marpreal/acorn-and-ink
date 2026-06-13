@@ -14,7 +14,6 @@ export const metadata: Metadata = {
   title: "Acorn & Ink — an enchanted library in the heart of the wood",
   description:
     "A cozy, goblincore library where you tend your shelves of novels, manga and comics by candlelight — track what you read, rate by mushrooms, and wander a public library of the world's books.",
-  icons: { icon: "/brand/sigil.webp" },
 };
 
 export const viewport: Viewport = {

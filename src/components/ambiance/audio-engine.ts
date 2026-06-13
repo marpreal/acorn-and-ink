@@ -1,18 +1,12 @@
 // The library's voice: forest music (Howler) + a tiny procedural synth (Web Audio)
 // that conjures page-turns, sparkles and wooden chimes with no sound files at all.
+// The music library itself is generated into src/lib/tracks.ts by scripts/import-music.mjs.
 
 import { Howl } from "howler";
+import { TRACKS, type Track } from "@/lib/tracks";
 
-export type TrackInfo = { title: string; file: string };
-
-export const TRACKS: TrackInfo[] = [
-  { title: "Woods of Old", file: "/sounds/woods-of-old.mp3" },
-  { title: "Autumn I", file: "/sounds/autumn-I.mp3" },
-  { title: "Birth of the Toad King", file: "/sounds/birth-of-the-toad-king.mp3" },
-  { title: "Edge of Town", file: "/sounds/edge-of-town.mp3" },
-  { title: "Way to the Lost Kingdom", file: "/sounds/way-to-the-lost-kingdom.mp3" },
-  { title: "Ashen Eidolon", file: "/sounds/ashen-eidolon.mp3" },
-];
+export type TrackInfo = Track;
+export { TRACKS };
 
 export type SfxName =
   | "page" | "sparkle" | "chime" | "tap" | "hover"
@@ -28,7 +22,7 @@ export class AudioEngine {
   private trackIndex = 0;
 
   musicOn = false;
-  musicVolume = 0.38;
+  musicVolume = 0.45;
   sfxOn = true;
 
   // ── Web Audio (SFX) ───────────────────────────────────────────────
@@ -41,7 +35,6 @@ export class AudioEngine {
       this.sfxGain = this.ctx.createGain();
       this.sfxGain.gain.value = 0.3;
 
-      // a gentle shimmer tail so chimes feel like they ring through a hall
       this.delay = this.ctx.createDelay(1.0);
       this.delay.delayTime.value = 0.16;
       const feedback = this.ctx.createGain();
@@ -53,7 +46,6 @@ export class AudioEngine {
 
       this.sfxGain.connect(this.ctx.destination);
 
-      // white-noise buffer for breathy page-turns
       const len = Math.floor(this.ctx.sampleRate * 0.4);
       const buf = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
       const data = buf.getChannelData(0);
@@ -64,10 +56,7 @@ export class AudioEngine {
     return this.ctx;
   }
 
-  /** Must be called from a user gesture to satisfy autoplay rules. */
-  unlock() {
-    this.ensureCtx();
-  }
+  unlock() { this.ensureCtx(); }
 
   private tone(opts: {
     freq: number; type?: OscillatorType; start?: number; dur: number;
@@ -113,49 +102,33 @@ export class AudioEngine {
     if (!this.sfxOn) return;
     if (!this.ensureCtx()) return;
     switch (name) {
-      case "hover":
-        this.tone({ freq: 1320, type: "sine", dur: 0.09, gain: 0.05 });
-        break;
+      case "hover": this.tone({ freq: 1320, type: "sine", dur: 0.09, gain: 0.05 }); break;
       case "tap":
         this.tone({ freq: 320, type: "triangle", dur: 0.12, gain: 0.16, toFreq: 180 });
-        this.noise({ dur: 0.05, gain: 0.05, cutoff: 2600 });
-        break;
-      case "page":
-        this.noise({ dur: 0.22, gain: 0.16, cutoff: 1200, sweepTo: 3200 });
-        break;
-      case "open":
-        [392, 523.25, 659.25].forEach((f, i) =>
-          this.tone({ freq: f, type: "triangle", start: i * 0.05, dur: 0.5, gain: 0.12, shimmer: true }));
-        break;
-      case "close":
-        [659.25, 523.25, 392].forEach((f, i) =>
-          this.tone({ freq: f, type: "triangle", start: i * 0.05, dur: 0.4, gain: 0.1, shimmer: true }));
-        break;
-      case "sparkle":
-        [1046, 1318, 1568, 2093].forEach((f, i) =>
-          this.tone({ freq: f, type: "sine", start: i * 0.045, dur: 0.32, gain: 0.08, shimmer: true }));
-        break;
+        this.noise({ dur: 0.05, gain: 0.05, cutoff: 2600 }); break;
+      case "page": this.noise({ dur: 0.22, gain: 0.16, cutoff: 1200, sweepTo: 3200 }); break;
+      case "open": [392, 523.25, 659.25].forEach((f, i) => this.tone({ freq: f, type: "triangle", start: i * 0.05, dur: 0.5, gain: 0.12, shimmer: true })); break;
+      case "close": [659.25, 523.25, 392].forEach((f, i) => this.tone({ freq: f, type: "triangle", start: i * 0.05, dur: 0.4, gain: 0.1, shimmer: true })); break;
+      case "sparkle": [1046, 1318, 1568, 2093].forEach((f, i) => this.tone({ freq: f, type: "sine", start: i * 0.045, dur: 0.32, gain: 0.08, shimmer: true })); break;
       case "chime":
         this.tone({ freq: 587.33, type: "sine", dur: 1.2, gain: 0.14, shimmer: true });
-        this.tone({ freq: 1174.66, type: "sine", dur: 0.9, gain: 0.05, shimmer: true });
-        break;
-      case "success":
-        [523.25, 659.25, 783.99, 1046.5].forEach((f, i) =>
-          this.tone({ freq: f, type: "triangle", start: i * 0.08, dur: 0.6, gain: 0.12, shimmer: true }));
-        break;
+        this.tone({ freq: 1174.66, type: "sine", dur: 0.9, gain: 0.05, shimmer: true }); break;
+      case "success": [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => this.tone({ freq: f, type: "triangle", start: i * 0.08, dur: 0.6, gain: 0.12, shimmer: true })); break;
       case "error":
         this.tone({ freq: 220, type: "sawtooth", dur: 0.28, gain: 0.1, toFreq: 180 });
-        this.tone({ freq: 233, type: "sine", dur: 0.3, gain: 0.06 });
-        break;
+        this.tone({ freq: 233, type: "sine", dur: 0.3, gain: 0.06 }); break;
     }
   }
 
-  // ── Howler (forest ambience) ──────────────────────────────────────
+  // ── Howler (the music library) ────────────────────────────────────
   private loadTrack(index: number, autoplay: boolean) {
     this.howl?.unload();
-    this.trackIndex = (index + TRACKS.length) % TRACKS.length;
+    const n = TRACKS.length || 1;
+    this.trackIndex = ((index % n) + n) % n;
+    const track = TRACKS[this.trackIndex];
+    if (!track) return;
     this.howl = new Howl({
-      src: [TRACKS[this.trackIndex].file],
+      src: [track.file],
       html5: true,
       volume: this.musicVolume,
       autoplay,
@@ -163,7 +136,7 @@ export class AudioEngine {
     });
   }
 
-  get currentTrack(): TrackInfo { return TRACKS[this.trackIndex]; }
+  get currentTrack(): TrackInfo | undefined { return TRACKS[this.trackIndex]; }
   get currentIndex(): number { return this.trackIndex; }
 
   setMusicOn(on: boolean) {
@@ -176,14 +149,9 @@ export class AudioEngine {
     }
   }
 
-  next() {
-    const wasOn = this.musicOn;
-    this.loadTrack(this.trackIndex + 1, wasOn);
-  }
-  prev() {
-    const wasOn = this.musicOn;
-    this.loadTrack(this.trackIndex - 1, wasOn);
-  }
+  next() { this.loadTrack(this.trackIndex + 1, this.musicOn); }
+  prev() { this.loadTrack(this.trackIndex - 1, this.musicOn); }
+
   playIndex(index: number) {
     this.loadTrack(index, true);
     this.musicOn = true;

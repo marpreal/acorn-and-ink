@@ -11,7 +11,17 @@ import type { BookDTO } from "@/lib/book-dto";
 import MushroomRating from "./MushroomRating";
 import { useSfx } from "@/components/ambiance/ambiance-context";
 
-export default function BookCard({ book, onEdit }: { book: BookDTO; onEdit: (b: BookDTO) => void }) {
+export default function BookCard({
+  book,
+  onEdit,
+  onLocalRemove,
+  onLocalUpdate,
+}: {
+  book: BookDTO;
+  onEdit: (b: BookDTO) => void;
+  onLocalRemove: (id: string) => void;
+  onLocalUpdate: (id: string, patch: Partial<BookDTO>) => void;
+}) {
   const router = useRouter();
   const sfx = useSfx();
   const [pending, start] = useTransition();
@@ -19,24 +29,40 @@ export default function BookCard({ book, onEdit }: { book: BookDTO; onEdit: (b: 
   const fmt = formatMeta(book.format);
   const st = statusMeta(book.status);
 
-  const run = (fn: () => Promise<unknown>) => start(async () => { await fn(); router.refresh(); });
+  const remove = () => {
+    sfx("close");
+    setConfirming(false);
+    onLocalRemove(book.id); // vanish immediately
+    start(async () => { await deleteBook(book.id); router.refresh(); });
+  };
+
+  const changeStatus = (status: string) => {
+    sfx("tap");
+    onLocalUpdate(book.id, { status });
+    start(async () => { await setBookStatus(book.id, status); router.refresh(); });
+  };
+
+  const rate = (v: number) => {
+    sfx("tap");
+    onLocalUpdate(book.id, { rating: v === 0 ? null : v });
+    start(async () => { await setBookRating(book.id, v); router.refresh(); });
+  };
 
   return (
     <motion.article
       layout
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.92 }}
       className="glass rounded-2xl p-3 flex gap-3 relative"
-      style={{ opacity: pending ? 0.7 : 1 }}
+      style={{ opacity: pending ? 0.75 : 1 }}
     >
       {book.favorite && (
         <span className="absolute -top-2 -right-2 text-lg" title="A treasured favourite" style={{ filter: "drop-shadow(0 0 6px rgba(245,196,81,0.8))" }}>✦</span>
       )}
 
-      {/* cover or generated spine */}
       <div className="shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 108, boxShadow: "0 8px 18px -10px rgba(0,0,0,0.8)" }}>
         {book.coverUrl ? (
-          // user/Open Library covers come from many hosts — use a plain img
           // eslint-disable-next-line @next/next/no-img-element
           <img src={book.coverUrl} alt="" className="w-full h-full object-cover" loading="lazy" />
         ) : (
@@ -63,13 +89,13 @@ export default function BookCard({ book, onEdit }: { book: BookDTO; onEdit: (b: 
         </p>
 
         <div className="mt-1.5">
-          <MushroomRating value={book.rating} size={16} onRate={(v) => { sfx("tap"); run(() => setBookRating(book.id, v)); }} />
+          <MushroomRating value={book.rating} size={16} onRate={rate} />
         </div>
 
         <div className="mt-auto pt-2 flex items-center gap-1.5 flex-wrap">
           <select
             value={book.status}
-            onChange={(e) => { sfx("tap"); run(() => setBookStatus(book.id, e.target.value)); }}
+            onChange={(e) => changeStatus(e.target.value)}
             className="text-xs rounded-full px-2 py-1 cursor-pointer"
             style={{ background: `${st.accent}22`, color: st.accent, border: `1px solid ${st.accent}55` }}
             aria-label="Reading status"
@@ -87,9 +113,9 @@ export default function BookCard({ book, onEdit }: { book: BookDTO; onEdit: (b: 
               <Pencil size={15} />
             </button>
             {confirming ? (
-              <span className="flex items-center gap-1 text-xs">
-                <button onClick={() => { sfx("close"); run(() => deleteBook(book.id)); }} className="px-1.5 rounded" style={{ color: "var(--color-toadstool-bright)" }}>remove</button>
-                <button onClick={() => setConfirming(false)} className="px-1 rounded" style={{ color: "var(--color-moss-300)" }}>no</button>
+              <span className="flex items-center gap-1 text-xs rounded-lg px-1.5 py-1" style={{ background: "rgba(179,54,31,0.18)" }}>
+                <button onClick={remove} className="font-serif-d px-1" style={{ color: "var(--color-toadstool-bright)" }}>remove</button>
+                <button onClick={() => setConfirming(false)} className="px-1" style={{ color: "var(--color-moss-300)" }}>keep</button>
               </span>
             ) : (
               <button onClick={() => { sfx("tap"); setConfirming(true); }} aria-label="Remove" title="Let it go"
