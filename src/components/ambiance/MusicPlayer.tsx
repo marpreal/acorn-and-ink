@@ -46,6 +46,12 @@ export default function MusicPlayer() {
     return () => clearInterval(id);
   }, [open, engine, a.trackIndex, a.musicOn]);
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    if (open) window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
   if (!a.ready) return null;
 
   const back = () => {
@@ -127,7 +133,7 @@ export default function MusicPlayer() {
     // now playing
     return (
       <div className="flex flex-col items-center text-center px-2 pt-1">
-        <Cover src={current?.cover ?? null} size={104} />
+        <Cover src={current?.cover ?? null} size={92} />
         <div className="mt-2 font-serif-d truncate w-full" style={{ color: "var(--color-glow)" }}>{current?.title ?? "—"}</div>
         <div className="text-xs truncate w-full" style={{ color: "var(--color-moss-200)" }}>{current?.artist}</div>
         <div className="text-[0.68rem] truncate w-full" style={{ color: "var(--color-moss-400)" }}>{current?.album}</div>
@@ -152,63 +158,68 @@ export default function MusicPlayer() {
   const titles: Record<View, string> = { menu: "The Wireless Toadstool", albums: "Albums", album: album?.album ?? "Album", now: "Now Playing" };
 
   return (
-    <div className="fixed bottom-5 left-5 z-[70] flex flex-col items-start gap-3">
+    <>
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 18, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.95 }}
-            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            className="rounded-[2rem] p-4 w-[270px]"
-            style={{
-              background: "linear-gradient(165deg,#f3e7cf,#d9c79f 60%,#b98f5c)",
-              border: "1px solid rgba(120,86,46,0.5)",
-              boxShadow: "0 26px 60px -22px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.6)",
-            }}
-            role="dialog" aria-label="Music player"
+            className="fixed inset-0 z-[80] flex items-end justify-start p-4 sm:p-5"
+            style={{ background: "rgba(8,10,8,0.55)", backdropFilter: "blur(3px)" }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={() => { a.playSfx("close"); setOpen(false); }}
           >
-            <div className="flex items-center justify-between mb-1 px-1">
-              <span className="font-hand text-lg" style={{ color: "#5a4225" }}>🍄 forest pod</span>
-              <button onClick={() => { a.playSfx("close"); setOpen(false); }} aria-label="Close" style={{ color: "#6b4a2b" }}><X size={16} /></button>
-            </div>
-
-            {/* screen */}
-            <div className="rounded-xl p-2 h-[208px] overflow-y-auto"
-              style={{ background: "linear-gradient(180deg,#0e1410,#16231a)", border: "2px solid #2a1d0f", boxShadow: "inset 0 2px 10px rgba(0,0,0,0.7)" }}>
+            <motion.div
+              initial={{ opacity: 0, y: 18, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 18, scale: 0.95 }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              className="rounded-[2rem] p-4 w-[280px] max-h-[94dvh] overflow-y-auto"
+              style={{
+                background: "linear-gradient(165deg,#f3e7cf,#d9c79f 60%,#b98f5c)",
+                border: "1px solid rgba(120,86,46,0.5)",
+                boxShadow: "0 26px 70px -20px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.6)",
+              }}
+              role="dialog" aria-label="Music player"
+              onClick={(e) => e.stopPropagation()}
+            >
               <div className="flex items-center justify-between mb-1 px-1">
-                <button onClick={back} className="text-[0.62rem] flex items-center gap-0.5" style={{ color: "var(--color-moss-300)" }} aria-label="Back">
-                  {view !== "menu" && <><ChevronUp size={11} className="-rotate-90" /> back</>}
-                </button>
-                <span className="text-[0.62rem] tracking-wide truncate" style={{ color: "var(--color-candle)" }}>{titles[view]}</span>
-                <span className="text-[0.62rem]" style={{ color: "var(--color-moss-400)" }}>🍂</span>
+                <span className="font-hand text-lg" style={{ color: "#5a4225" }}>🍄 forest pod</span>
+                <button onClick={() => { a.playSfx("close"); setOpen(false); }} aria-label="Close" style={{ color: "#6b4a2b" }}><X size={18} /></button>
               </div>
-              {screen()}
-            </div>
 
-            {/* click wheel */}
-            <div className="relative mx-auto mt-4" style={{ width: 150, height: 150 }}>
-              <div className="absolute inset-0 rounded-full"
-                style={{ background: "radial-gradient(circle at 50% 35%, #e9dcc0, #c2a878 70%, #9c7a4f)", boxShadow: "inset 0 2px 8px rgba(255,255,255,0.5), 0 6px 16px -8px rgba(0,0,0,0.6)" }} />
-              <button onClick={back} aria-label="Menu / back"
-                className="absolute left-1/2 -translate-x-1/2 top-2 text-[0.7rem] font-serif-d" style={{ color: "#5a4225" }}>MENU</button>
-              <button onClick={() => { a.playSfx("tap"); a.prevTrack(); }} aria-label="Previous"
-                className="absolute left-2 top-1/2 -translate-y-1/2 p-1" style={{ color: "#5a4225" }}><SkipBack size={18} /></button>
-              <button onClick={() => { a.playSfx("tap"); a.nextTrack(); }} aria-label="Next"
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1" style={{ color: "#5a4225" }}><SkipForward size={18} /></button>
-              <button onClick={() => { a.playSfx("tap"); setView("now"); }} aria-label="Now playing"
-                className="absolute left-1/2 -translate-x-1/2 bottom-2 p-1" style={{ color: "#5a4225" }}><Disc3 size={16} /></button>
-              <button onClick={() => { a.playSfx("tap"); a.toggleMusic(); }} aria-label={a.musicOn ? "Pause" : "Play"}
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-full"
-                style={{ width: 58, height: 58, background: "radial-gradient(circle at 50% 35%, #fff7e6, #e4d2ab 70%, #c2a878)", boxShadow: "0 2px 8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.7)", color: "#3a2c1a" }}>
-                {a.musicOn ? <Pause size={22} /> : <Play size={22} />}
-              </button>
-            </div>
+              {/* screen */}
+              <div className="rounded-xl p-2 h-[164px] overflow-y-auto"
+                style={{ background: "linear-gradient(180deg,#0e1410,#16231a)", border: "2px solid #2a1d0f", boxShadow: "inset 0 2px 10px rgba(0,0,0,0.7)" }}>
+                <div className="flex items-center justify-between mb-1 px-1 sticky top-0" style={{ background: "linear-gradient(180deg,#0e1410,#0e1410cc 70%,transparent)" }}>
+                  <button onClick={back} className="text-[0.62rem] flex items-center gap-0.5" style={{ color: "var(--color-moss-300)" }} aria-label="Back">
+                    {view !== "menu" && <><ChevronUp size={11} className="-rotate-90" /> back</>}
+                  </button>
+                  <span className="text-[0.62rem] tracking-wide truncate" style={{ color: "var(--color-candle)" }}>{titles[view]}</span>
+                  <span className="text-[0.62rem]" style={{ color: "var(--color-moss-400)" }}>🍂</span>
+                </div>
+                {screen()}
+              </div>
 
-            <div className="mt-3 flex items-center gap-2 px-1">
-              <span className="text-xs" style={{ color: "#6b4a2b" }}>🔉</span>
-              <input type="range" min={0} max={1} step={0.01} value={a.volume}
-                onChange={(e) => a.setVolume(parseFloat(e.target.value))} aria-label="Volume"
-                className="w-full" style={{ accentColor: "#b3361f" }} />
-            </div>
+              {/* transport bar — always visible */}
+              <div className="mt-3 flex items-center justify-center gap-3">
+                <button onClick={() => { a.playSfx("tap"); a.prevTrack(); }} aria-label="Previous"
+                  className="grid place-items-center rounded-full" style={{ width: 40, height: 40, background: "#e4d2ab", color: "#3a2c1a", boxShadow: "0 2px 6px rgba(0,0,0,0.3)" }}>
+                  <SkipBack size={18} />
+                </button>
+                <button onClick={() => { a.playSfx("tap"); a.toggleMusic(); }} aria-label={a.musicOn ? "Pause" : "Play"}
+                  className="grid place-items-center rounded-full" style={{ width: 58, height: 58, background: "radial-gradient(circle at 50% 35%, #ffb24d, #b3361f)", color: "#2a1408", boxShadow: "0 4px 14px -2px rgba(179,54,31,0.7), inset 0 1px 0 rgba(255,255,255,0.4)" }}>
+                  {a.musicOn ? <Pause size={26} /> : <Play size={26} />}
+                </button>
+                <button onClick={() => { a.playSfx("tap"); a.nextTrack(); }} aria-label="Next"
+                  className="grid place-items-center rounded-full" style={{ width: 40, height: 40, background: "#e4d2ab", color: "#3a2c1a", boxShadow: "0 2px 6px rgba(0,0,0,0.3)" }}>
+                  <SkipForward size={18} />
+                </button>
+              </div>
+
+              <div className="mt-3 flex items-center gap-2 px-1">
+                <span className="text-xs" style={{ color: "#6b4a2b" }}>🔉</span>
+                <input type="range" min={0} max={1} step={0.01} value={a.volume}
+                  onChange={(e) => a.setVolume(parseFloat(e.target.value))} aria-label="Volume"
+                  className="w-full" style={{ accentColor: "#b3361f" }} />
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -217,7 +228,7 @@ export default function MusicPlayer() {
         onClick={() => { a.playSfx(open ? "close" : "open"); setOpen((v) => !v); }}
         whileHover={{ scale: 1.06 }} whileTap={{ scale: 0.94 }}
         aria-label="Open the music player"
-        className="relative grid place-items-center rounded-2xl"
+        className="fixed bottom-5 left-5 z-[70] grid place-items-center rounded-2xl"
         style={{
           width: 54, height: 54,
           background: "linear-gradient(160deg,#e9dcc0,#b98f5c)",
@@ -228,6 +239,6 @@ export default function MusicPlayer() {
       >
         {a.musicOn ? <Disc3 size={24} className="animate-spin" style={{ animationDuration: "3.5s" }} /> : <Radio size={24} />}
       </motion.button>
-    </div>
+    </>
   );
 }

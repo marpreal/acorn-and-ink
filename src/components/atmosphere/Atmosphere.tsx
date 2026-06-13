@@ -56,8 +56,8 @@ function CandleCursor({ lively }: { lively: boolean }) {
 
     let raf = 0;
     const frame = () => {
-      pos.x += (pointer.x - pos.x) * 0.2;
-      pos.y += (pointer.y - pos.y) * 0.2;
+      pos.x += (pointer.x - pos.x) * 0.45;
+      pos.y += (pointer.y - pos.y) * 0.45;
       const speed = Math.hypot(pos.x - lastX, pos.y - lastY);
       lastX = pos.x; lastY = pos.y;
 
@@ -107,7 +107,7 @@ function CandleCursor({ lively }: { lively: boolean }) {
       <div
         ref={flameRef}
         aria-hidden
-        className="fixed left-0 top-0 z-[61] pointer-events-none"
+        className="fixed left-0 top-0 z-[90] pointer-events-none"
         style={{ width: 0, height: 0 }}
       >
         <div
