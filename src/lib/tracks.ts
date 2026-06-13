@@ -13,43 +13,43 @@ export const ALBUMS: Album[] = [
     "id": "trova-de-lid-lira-de-dragon",
     "artist": "Trova de Lid",
     "album": "Lira de Dragón",
-    "cover": "/sounds/trova-de-lid-lira-de-dragon/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/trova-de-lid-lira-de-dragon__cover.jpg",
     "tracks": [
       {
         "title": "Edad y Amor",
-        "file": "/sounds/trova-de-lid-lira-de-dragon/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/trova-de-lid-lira-de-dragon__01.mp3"
       },
       {
         "title": "El trovador marcha",
-        "file": "/sounds/trova-de-lid-lira-de-dragon/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/trova-de-lid-lira-de-dragon__02.mp3"
       },
       {
         "title": "La lira del Dragón",
-        "file": "/sounds/trova-de-lid-lira-de-dragon/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/trova-de-lid-lira-de-dragon__03.mp3"
       },
       {
         "title": "La flor blanca",
-        "file": "/sounds/trova-de-lid-lira-de-dragon/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/trova-de-lid-lira-de-dragon__04.mp3"
       },
       {
         "title": "Fábulas de Otoño",
-        "file": "/sounds/trova-de-lid-lira-de-dragon/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/trova-de-lid-lira-de-dragon__05.mp3"
       },
       {
         "title": "Despertar entire ninfas",
-        "file": "/sounds/trova-de-lid-lira-de-dragon/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/trova-de-lid-lira-de-dragon__06.mp3"
       },
       {
         "title": "Tu recuerdo",
-        "file": "/sounds/trova-de-lid-lira-de-dragon/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/trova-de-lid-lira-de-dragon__07.mp3"
       },
       {
         "title": "Lo irreparable",
-        "file": "/sounds/trova-de-lid-lira-de-dragon/08.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/trova-de-lid-lira-de-dragon__08.mp3"
       },
       {
         "title": "Bonus- Splendor Solis",
-        "file": "/sounds/trova-de-lid-lira-de-dragon/09.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/trova-de-lid-lira-de-dragon__09.mp3"
       }
     ]
   },
@@ -57,35 +57,35 @@ export const ALBUMS: Album[] = [
     "id": "dim-compendium-i",
     "artist": "DIM",
     "album": "Compendium I",
-    "cover": "/sounds/dim-compendium-i/cover.png",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-i__cover.png",
     "tracks": [
       {
         "title": "Edge of Town",
-        "file": "/sounds/dim-compendium-i/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-i__01.mp3"
       },
       {
         "title": "Woods of Old",
-        "file": "/sounds/dim-compendium-i/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-i__02.mp3"
       },
       {
         "title": "Sellsword's Grotto",
-        "file": "/sounds/dim-compendium-i/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-i__03.mp3"
       },
       {
         "title": "Ellendrial's Lullaby",
-        "file": "/sounds/dim-compendium-i/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-i__04.mp3"
       },
       {
         "title": "Clandestine",
-        "file": "/sounds/dim-compendium-i/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-i__05.mp3"
       },
       {
         "title": "King's Arrival",
-        "file": "/sounds/dim-compendium-i/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-i__06.mp3"
       },
       {
         "title": "Farewell (New Lands Await)",
-        "file": "/sounds/dim-compendium-i/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-i__07.mp3"
       }
     ]
   },
@@ -93,43 +93,43 @@ export const ALBUMS: Album[] = [
     "id": "dim-compendium-v",
     "artist": "DIM",
     "album": "Compendium V",
-    "cover": "/sounds/dim-compendium-v/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-v__cover.jpg",
     "tracks": [
       {
         "title": "Ten Thousand in Bramble",
-        "file": "/sounds/dim-compendium-v/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-v__01.mp3"
       },
       {
         "title": "The Veil's Allure",
-        "file": "/sounds/dim-compendium-v/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-v__02.mp3"
       },
       {
         "title": "Mirage of the Path Behind",
-        "file": "/sounds/dim-compendium-v/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-v__03.mp3"
       },
       {
         "title": "Amber on the Waning Sky",
-        "file": "/sounds/dim-compendium-v/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-v__04.mp3"
       },
       {
         "title": "Firefly Cathedral",
-        "file": "/sounds/dim-compendium-v/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-v__05.mp3"
       },
       {
         "title": "Keep to the Lamplit Road",
-        "file": "/sounds/dim-compendium-v/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-v__06.mp3"
       },
       {
         "title": "Where Trees Frown",
-        "file": "/sounds/dim-compendium-v/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-v__07.mp3"
       },
       {
         "title": "Lair of Long Silence",
-        "file": "/sounds/dim-compendium-v/08.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-v__08.mp3"
       },
       {
         "title": "Glint of a Gleaming Shore (Home)",
-        "file": "/sounds/dim-compendium-v/09.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-compendium-v__09.mp3"
       }
     ]
   },
@@ -137,19 +137,19 @@ export const ALBUMS: Album[] = [
     "id": "dim-the-veins-of-a-hidden-stair",
     "artist": "DIM",
     "album": "The Veins of a Hidden Stair",
-    "cover": "/sounds/dim-the-veins-of-a-hidden-stair/cover.png",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-the-veins-of-a-hidden-stair__cover.png",
     "tracks": [
       {
         "title": "Sorrow and Death",
-        "file": "/sounds/dim-the-veins-of-a-hidden-stair/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-the-veins-of-a-hidden-stair__01.mp3"
       },
       {
         "title": "Hidden Stair",
-        "file": "/sounds/dim-the-veins-of-a-hidden-stair/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-the-veins-of-a-hidden-stair__02.mp3"
       },
       {
         "title": "Felled Cavern Beneath a Coarse and Distant Sky",
-        "file": "/sounds/dim-the-veins-of-a-hidden-stair/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/dim-the-veins-of-a-hidden-stair__03.mp3"
       }
     ]
   },
@@ -157,35 +157,35 @@ export const ALBUMS: Album[] = [
     "id": "hellige-malebolge",
     "artist": "Hellige",
     "album": "Malebolge",
-    "cover": "/sounds/hellige-malebolge/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-malebolge__cover.jpg",
     "tracks": [
       {
         "title": "Woman of Blood and Fury",
-        "file": "/sounds/hellige-malebolge/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-malebolge__01.mp3"
       },
       {
         "title": "Great Scourge",
-        "file": "/sounds/hellige-malebolge/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-malebolge__02.mp3"
       },
       {
         "title": "THOU ART O'ERTAKEN",
-        "file": "/sounds/hellige-malebolge/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-malebolge__03.mp3"
       },
       {
         "title": "Malebolge",
-        "file": "/sounds/hellige-malebolge/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-malebolge__04.mp3"
       },
       {
         "title": "O Wrath Insane...",
-        "file": "/sounds/hellige-malebolge/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-malebolge__05.mp3"
       },
       {
         "title": "Viewless Winds",
-        "file": "/sounds/hellige-malebolge/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-malebolge__06.mp3"
       },
       {
         "title": "Kingdom Come",
-        "file": "/sounds/hellige-malebolge/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-malebolge__07.mp3"
       }
     ]
   },
@@ -193,35 +193,35 @@ export const ALBUMS: Album[] = [
     "id": "hellige-eternal-winds-of-ash-ice",
     "artist": "Hellige",
     "album": "Eternal Winds of Ash & Ice",
-    "cover": "/sounds/hellige-eternal-winds-of-ash-ice/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-eternal-winds-of-ash-ice__cover.jpg",
     "tracks": [
       {
         "title": "O Sweet Light, Sweet Siren",
-        "file": "/sounds/hellige-eternal-winds-of-ash-ice/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-eternal-winds-of-ash-ice__01.mp3"
       },
       {
         "title": "Emerald Flesh",
-        "file": "/sounds/hellige-eternal-winds-of-ash-ice/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-eternal-winds-of-ash-ice__02.mp3"
       },
       {
         "title": "Wreath of Kingsfoil",
-        "file": "/sounds/hellige-eternal-winds-of-ash-ice/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-eternal-winds-of-ash-ice__03.mp3"
       },
       {
         "title": "Weighted Wings",
-        "file": "/sounds/hellige-eternal-winds-of-ash-ice/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-eternal-winds-of-ash-ice__04.mp3"
       },
       {
         "title": "The Snow It Melts the Soonest",
-        "file": "/sounds/hellige-eternal-winds-of-ash-ice/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-eternal-winds-of-ash-ice__05.mp3"
       },
       {
         "title": "Forests in Gold",
-        "file": "/sounds/hellige-eternal-winds-of-ash-ice/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-eternal-winds-of-ash-ice__06.mp3"
       },
       {
         "title": "Graven Pathways",
-        "file": "/sounds/hellige-eternal-winds-of-ash-ice/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/hellige-eternal-winds-of-ash-ice__07.mp3"
       }
     ]
   },
@@ -229,27 +229,27 @@ export const ALBUMS: Album[] = [
     "id": "gallowbraid-ashen-eidolon",
     "artist": "Gallowbraid",
     "album": "Ashen Eidolon",
-    "cover": "/sounds/gallowbraid-ashen-eidolon/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/gallowbraid-ashen-eidolon__cover.jpg",
     "tracks": [
       {
         "title": "Ashen Eidolon",
-        "file": "/sounds/gallowbraid-ashen-eidolon/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/gallowbraid-ashen-eidolon__01.mp3"
       },
       {
         "title": "Autumn I",
-        "file": "/sounds/gallowbraid-ashen-eidolon/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/gallowbraid-ashen-eidolon__02.mp3"
       },
       {
         "title": "Oak and Aspen",
-        "file": "/sounds/gallowbraid-ashen-eidolon/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/gallowbraid-ashen-eidolon__03.mp3"
       },
       {
         "title": "Autumn II",
-        "file": "/sounds/gallowbraid-ashen-eidolon/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/gallowbraid-ashen-eidolon__04.mp3"
       },
       {
         "title": "Stone of Remembrance",
-        "file": "/sounds/gallowbraid-ashen-eidolon/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/gallowbraid-ashen-eidolon__05.mp3"
       }
     ]
   },
@@ -257,47 +257,47 @@ export const ALBUMS: Album[] = [
     "id": "thurnin-menhir",
     "artist": "Thurnin",
     "album": "Menhir",
-    "cover": "/sounds/thurnin-menhir/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/thurnin-menhir__cover.jpg",
     "tracks": [
       {
         "title": "The Voyage",
-        "file": "/sounds/thurnin-menhir/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/thurnin-menhir__01.mp3"
       },
       {
         "title": "Ancient Rites",
-        "file": "/sounds/thurnin-menhir/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/thurnin-menhir__02.mp3"
       },
       {
         "title": "Vicariously, We Rest",
-        "file": "/sounds/thurnin-menhir/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/thurnin-menhir__03.mp3"
       },
       {
         "title": "Vagrants",
-        "file": "/sounds/thurnin-menhir/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/thurnin-menhir__04.mp3"
       },
       {
         "title": "The Oath",
-        "file": "/sounds/thurnin-menhir/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/thurnin-menhir__05.mp3"
       },
       {
         "title": "Forsake Us Not",
-        "file": "/sounds/thurnin-menhir/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/thurnin-menhir__06.mp3"
       },
       {
         "title": "Winds of Decay",
-        "file": "/sounds/thurnin-menhir/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/thurnin-menhir__07.mp3"
       },
       {
         "title": "A Lament for the End",
-        "file": "/sounds/thurnin-menhir/08.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/thurnin-menhir__08.mp3"
       },
       {
         "title": "Trials of Menhir",
-        "file": "/sounds/thurnin-menhir/09.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/thurnin-menhir__09.mp3"
       },
       {
         "title": "Fall of Men",
-        "file": "/sounds/thurnin-menhir/10.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/thurnin-menhir__10.mp3"
       }
     ]
   },
@@ -305,43 +305,43 @@ export const ALBUMS: Album[] = [
     "id": "elyvilon-bhr006-drums-in-the-deepwood",
     "artist": "Elyvilon",
     "album": "BHR006- Drums in the Deepwood",
-    "cover": "/sounds/elyvilon-bhr006-drums-in-the-deepwood/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/elyvilon-bhr006-drums-in-the-deepwood__cover.jpg",
     "tracks": [
       {
         "title": "A Great Stirring",
-        "file": "/sounds/elyvilon-bhr006-drums-in-the-deepwood/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/elyvilon-bhr006-drums-in-the-deepwood__01.mp3"
       },
       {
         "title": "A Hunger to Carry Off Flocks",
-        "file": "/sounds/elyvilon-bhr006-drums-in-the-deepwood/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/elyvilon-bhr006-drums-in-the-deepwood__02.mp3"
       },
       {
         "title": "Just Stones Beneath the Bridge",
-        "file": "/sounds/elyvilon-bhr006-drums-in-the-deepwood/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/elyvilon-bhr006-drums-in-the-deepwood__03.mp3"
       },
       {
         "title": "Peikon Luola",
-        "file": "/sounds/elyvilon-bhr006-drums-in-the-deepwood/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/elyvilon-bhr006-drums-in-the-deepwood__04.mp3"
       },
       {
         "title": "What Broods Under Deepening Cloudmurk",
-        "file": "/sounds/elyvilon-bhr006-drums-in-the-deepwood/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/elyvilon-bhr006-drums-in-the-deepwood__05.mp3"
       },
       {
         "title": "Moss-Laden and Shambling",
-        "file": "/sounds/elyvilon-bhr006-drums-in-the-deepwood/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/elyvilon-bhr006-drums-in-the-deepwood__06.mp3"
       },
       {
         "title": "Gristle and Bone, All Turned to Stone",
-        "file": "/sounds/elyvilon-bhr006-drums-in-the-deepwood/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/elyvilon-bhr006-drums-in-the-deepwood__07.mp3"
       },
       {
         "title": "Gahanka",
-        "file": "/sounds/elyvilon-bhr006-drums-in-the-deepwood/08.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/elyvilon-bhr006-drums-in-the-deepwood__08.mp3"
       },
       {
         "title": "Drums in the Deepwood",
-        "file": "/sounds/elyvilon-bhr006-drums-in-the-deepwood/09.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/elyvilon-bhr006-drums-in-the-deepwood__09.mp3"
       }
     ]
   },
@@ -349,39 +349,39 @@ export const ALBUMS: Album[] = [
     "id": "nachtwache-sorgen-mac-diu-sela",
     "artist": "Nachtwache",
     "album": "Sorgēn mac diu sēla",
-    "cover": "/sounds/nachtwache-sorgen-mac-diu-sela/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/nachtwache-sorgen-mac-diu-sela__cover.jpg",
     "tracks": [
       {
         "title": "Hellarūna Intro",
-        "file": "/sounds/nachtwache-sorgen-mac-diu-sela/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/nachtwache-sorgen-mac-diu-sela__01.mp3"
       },
       {
         "title": "Sorgēn mac diu sēla",
-        "file": "/sounds/nachtwache-sorgen-mac-diu-sela/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/nachtwache-sorgen-mac-diu-sela__02.mp3"
       },
       {
         "title": "Thar uaht thegeno gelih",
-        "file": "/sounds/nachtwache-sorgen-mac-diu-sela/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/nachtwache-sorgen-mac-diu-sela__03.mp3"
       },
       {
         "title": "Ih bim āmarlīh",
-        "file": "/sounds/nachtwache-sorgen-mac-diu-sela/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/nachtwache-sorgen-mac-diu-sela__04.mp3"
       },
       {
         "title": "Sīn tac piqueme, daz er touuan scal",
-        "file": "/sounds/nachtwache-sorgen-mac-diu-sela/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/nachtwache-sorgen-mac-diu-sela__05.mp3"
       },
       {
         "title": "Lietz her heidine man ober seo lidan",
-        "file": "/sounds/nachtwache-sorgen-mac-diu-sela/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/nachtwache-sorgen-mac-diu-sela__06.mp3"
       },
       {
         "title": "Feichanig",
-        "file": "/sounds/nachtwache-sorgen-mac-diu-sela/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/nachtwache-sorgen-mac-diu-sela__07.mp3"
       },
       {
         "title": "Min herza",
-        "file": "/sounds/nachtwache-sorgen-mac-diu-sela/08.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/nachtwache-sorgen-mac-diu-sela__08.mp3"
       }
     ]
   },
@@ -389,51 +389,51 @@ export const ALBUMS: Album[] = [
     "id": "various-artists-children-of-the-underground-charity-compilation",
     "artist": "Various Artists",
     "album": "Children of The Underground - Charity Compilation",
-    "cover": "/sounds/various-artists-children-of-the-underground-charity-compilation/cover.png",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__cover.png",
     "tracks": [
       {
         "title": "die Puppe der letzten Zuflucht",
-        "file": "/sounds/various-artists-children-of-the-underground-charity-compilation/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__01.mp3"
       },
       {
         "title": "Ночной Бросок",
-        "file": "/sounds/various-artists-children-of-the-underground-charity-compilation/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__02.mp3"
       },
       {
         "title": "Ball of Worms",
-        "file": "/sounds/various-artists-children-of-the-underground-charity-compilation/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__03.mp3"
       },
       {
         "title": "Formless Memories",
-        "file": "/sounds/various-artists-children-of-the-underground-charity-compilation/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__04.mp3"
       },
       {
         "title": "Помни Меня",
-        "file": "/sounds/various-artists-children-of-the-underground-charity-compilation/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__05.mp3"
       },
       {
         "title": "Чёрная Комета",
-        "file": "/sounds/various-artists-children-of-the-underground-charity-compilation/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__06.mp3"
       },
       {
         "title": "Zuflucht der Atem von Marusja",
-        "file": "/sounds/various-artists-children-of-the-underground-charity-compilation/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__07.mp3"
       },
       {
         "title": "Soil Under Nails",
-        "file": "/sounds/various-artists-children-of-the-underground-charity-compilation/08.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__08.mp3"
       },
       {
         "title": "Maiden in a Crystal Tomb",
-        "file": "/sounds/various-artists-children-of-the-underground-charity-compilation/09.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__09.mp3"
       },
       {
         "title": "Спи Спокойно (R.I.P A.T)",
-        "file": "/sounds/various-artists-children-of-the-underground-charity-compilation/10.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__10.mp3"
       },
       {
         "title": "Fozen Sun",
-        "file": "/sounds/various-artists-children-of-the-underground-charity-compilation/11.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/various-artists-children-of-the-underground-charity-compilation__11.mp3"
       }
     ]
   },
@@ -441,31 +441,31 @@ export const ALBUMS: Album[] = [
     "id": "tales-under-the-oak-the-toad-king",
     "artist": "TALES UNDER THE OAK",
     "album": "The Toad King",
-    "cover": "/sounds/tales-under-the-oak-the-toad-king/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/tales-under-the-oak-the-toad-king__cover.jpg",
     "tracks": [
       {
         "title": "Birth of the Toad King",
-        "file": "/sounds/tales-under-the-oak-the-toad-king/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/tales-under-the-oak-the-toad-king__01.mp3"
       },
       {
         "title": "Ancient Wisdom of the Swamps",
-        "file": "/sounds/tales-under-the-oak-the-toad-king/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/tales-under-the-oak-the-toad-king__02.mp3"
       },
       {
         "title": "Wide Hall's Welcoming Light",
-        "file": "/sounds/tales-under-the-oak-the-toad-king/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/tales-under-the-oak-the-toad-king__03.mp3"
       },
       {
         "title": "Ruler's Crown",
-        "file": "/sounds/tales-under-the-oak-the-toad-king/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/tales-under-the-oak-the-toad-king__04.mp3"
       },
       {
         "title": "Eternal Sleep",
-        "file": "/sounds/tales-under-the-oak-the-toad-king/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/tales-under-the-oak-the-toad-king__05.mp3"
       },
       {
         "title": "Leaving the Frozen Swamp Kingdom",
-        "file": "/sounds/tales-under-the-oak-the-toad-king/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/tales-under-the-oak-the-toad-king__06.mp3"
       }
     ]
   },
@@ -473,71 +473,71 @@ export const ALBUMS: Album[] = [
     "id": "velum-lunae-santa-lepra",
     "artist": "Velum Lunae",
     "album": "Santa Lepra",
-    "cover": "/sounds/velum-lunae-santa-lepra/cover.png",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__cover.png",
     "tracks": [
       {
         "title": "El Altar Bajo el Musgo",
-        "file": "/sounds/velum-lunae-santa-lepra/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__01.mp3"
       },
       {
         "title": "Epifanía",
-        "file": "/sounds/velum-lunae-santa-lepra/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__02.mp3"
       },
       {
         "title": "Éxtasis",
-        "file": "/sounds/velum-lunae-santa-lepra/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__03.mp3"
       },
       {
         "title": "Hiedra",
-        "file": "/sounds/velum-lunae-santa-lepra/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__04.mp3"
       },
       {
         "title": "El Amparo de la Niebla",
-        "file": "/sounds/velum-lunae-santa-lepra/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__05.mp3"
       },
       {
         "title": "La Fuente de las Mentiras",
-        "file": "/sounds/velum-lunae-santa-lepra/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__06.mp3"
       },
       {
         "title": "El Rapto",
-        "file": "/sounds/velum-lunae-santa-lepra/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__07.mp3"
       },
       {
         "title": "Exvoto",
-        "file": "/sounds/velum-lunae-santa-lepra/08.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__08.mp3"
       },
       {
         "title": "El Claro (Luz de Plata)",
-        "file": "/sounds/velum-lunae-santa-lepra/09.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__09.mp3"
       },
       {
         "title": "Bajo las Cuatro Torres",
-        "file": "/sounds/velum-lunae-santa-lepra/10.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__10.mp3"
       },
       {
         "title": "La Tregua",
-        "file": "/sounds/velum-lunae-santa-lepra/11.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__11.mp3"
       },
       {
         "title": "Flagrum",
-        "file": "/sounds/velum-lunae-santa-lepra/12.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__12.mp3"
       },
       {
         "title": "La Seña del Ángel",
-        "file": "/sounds/velum-lunae-santa-lepra/13.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__13.mp3"
       },
       {
         "title": "Eclipse (Con Dani Dean)",
-        "file": "/sounds/velum-lunae-santa-lepra/14.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__14.mp3"
       },
       {
         "title": "La Luna, el Óxido y la Angustia",
-        "file": "/sounds/velum-lunae-santa-lepra/15.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__15.mp3"
       },
       {
         "title": "La Luz a Través de sus Estigmas",
-        "file": "/sounds/velum-lunae-santa-lepra/16.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/velum-lunae-santa-lepra__16.mp3"
       }
     ]
   },
@@ -545,43 +545,43 @@ export const ALBUMS: Album[] = [
     "id": "cave-spellcaster-troglodyte",
     "artist": "Cave Spellcaster",
     "album": "Troglodyte",
-    "cover": "/sounds/cave-spellcaster-troglodyte/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/cave-spellcaster-troglodyte__cover.jpg",
     "tracks": [
       {
         "title": "Crawler from the Underground",
-        "file": "/sounds/cave-spellcaster-troglodyte/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/cave-spellcaster-troglodyte__01.mp3"
       },
       {
         "title": "Rusty Spear Sharp No More",
-        "file": "/sounds/cave-spellcaster-troglodyte/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/cave-spellcaster-troglodyte__02.mp3"
       },
       {
         "title": "That Hateful Yellow Star",
-        "file": "/sounds/cave-spellcaster-troglodyte/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/cave-spellcaster-troglodyte__03.mp3"
       },
       {
         "title": "A Dance for the Under Gods (feat. Frost Clad)",
-        "file": "/sounds/cave-spellcaster-troglodyte/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/cave-spellcaster-troglodyte__04.mp3"
       },
       {
         "title": "A Moment of Reflection",
-        "file": "/sounds/cave-spellcaster-troglodyte/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/cave-spellcaster-troglodyte__05.mp3"
       },
       {
         "title": "Encapsulated by Primitive Magic",
-        "file": "/sounds/cave-spellcaster-troglodyte/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/cave-spellcaster-troglodyte__06.mp3"
       },
       {
         "title": "Eyeless Fate",
-        "file": "/sounds/cave-spellcaster-troglodyte/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/cave-spellcaster-troglodyte__07.mp3"
       },
       {
         "title": "Lone Dark Tower",
-        "file": "/sounds/cave-spellcaster-troglodyte/08.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/cave-spellcaster-troglodyte__08.mp3"
       },
       {
         "title": "Deep Sleep by the Underground Lake",
-        "file": "/sounds/cave-spellcaster-troglodyte/09.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/cave-spellcaster-troglodyte__09.mp3"
       }
     ]
   },
@@ -589,31 +589,31 @@ export const ALBUMS: Album[] = [
     "id": "iskonge-lone-knight",
     "artist": "Iskonge",
     "album": "Lone Knight",
-    "cover": "/sounds/iskonge-lone-knight/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/iskonge-lone-knight__cover.jpg",
     "tracks": [
       {
         "title": "The Calm in my Refuge",
-        "file": "/sounds/iskonge-lone-knight/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/iskonge-lone-knight__01.mp3"
       },
       {
         "title": "Hidden Treasure in the Cave",
-        "file": "/sounds/iskonge-lone-knight/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/iskonge-lone-knight__02.mp3"
       },
       {
         "title": "Ivy Leaves",
-        "file": "/sounds/iskonge-lone-knight/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/iskonge-lone-knight__03.mp3"
       },
       {
         "title": "Peacefully",
-        "file": "/sounds/iskonge-lone-knight/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/iskonge-lone-knight__04.mp3"
       },
       {
         "title": "Last Breath of the Dragon",
-        "file": "/sounds/iskonge-lone-knight/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/iskonge-lone-knight__05.mp3"
       },
       {
         "title": "Lone Knight",
-        "file": "/sounds/iskonge-lone-knight/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/iskonge-lone-knight__06.mp3"
       }
     ]
   },
@@ -621,35 +621,35 @@ export const ALBUMS: Album[] = [
     "id": "aethelu-chapter-i-e-p",
     "artist": "Aethelu",
     "album": "Chapter I (e.p.)",
-    "cover": "/sounds/aethelu-chapter-i-e-p/cover.jpg",
+    "cover": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/aethelu-chapter-i-e-p__cover.jpg",
     "tracks": [
       {
         "title": "Tower Hills",
-        "file": "/sounds/aethelu-chapter-i-e-p/01.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/aethelu-chapter-i-e-p__01.mp3"
       },
       {
         "title": "Spring of Arda",
-        "file": "/sounds/aethelu-chapter-i-e-p/02.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/aethelu-chapter-i-e-p__02.mp3"
       },
       {
         "title": "Light of the Trees",
-        "file": "/sounds/aethelu-chapter-i-e-p/03.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/aethelu-chapter-i-e-p__03.mp3"
       },
       {
         "title": "Tower of the Sun",
-        "file": "/sounds/aethelu-chapter-i-e-p/04.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/aethelu-chapter-i-e-p__04.mp3"
       },
       {
         "title": "Silverlode",
-        "file": "/sounds/aethelu-chapter-i-e-p/05.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/aethelu-chapter-i-e-p__05.mp3"
       },
       {
         "title": "Golden Wood",
-        "file": "/sounds/aethelu-chapter-i-e-p/06.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/aethelu-chapter-i-e-p__06.mp3"
       },
       {
         "title": "Mingling of the Lights",
-        "file": "/sounds/aethelu-chapter-i-e-p/07.mp3"
+        "file": "https://github.com/marpreal/acorn-and-ink/releases/download/music-v1/aethelu-chapter-i-e-p__07.mp3"
       }
     ]
   }
