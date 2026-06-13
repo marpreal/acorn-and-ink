@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate --schema prisma/schema.production.prisma && prisma db push --schema prisma/schema.production.prisma --skip-generate && next build",
+    "build": "prisma generate --schema prisma/schema.production.prisma && next build",
     "start": "next start",
     "lint": "eslint",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "db:push:prod": "prisma db push --schema prisma/schema.production.prisma"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
