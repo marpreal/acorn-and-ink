@@ -124,17 +124,41 @@ export class AudioEngine {
   }
 
   // ── Howler (the music library) ────────────────────────────────────
+  private unloadCurrent() {
+    if (!this.howl) return;
+    this.howl.stop();
+    this.howl.off();
+    this.howl.unload();
+    this.howl = null;
+  }
+
   private loadTrack(index: number, autoplay: boolean) {
-    this.howl?.unload();
     const n = TRACKS.length || 1;
-    this.trackIndex = ((index % n) + n) % n;
-    const track = TRACKS[this.trackIndex];
+    const nextIndex = ((index % n) + n) % n;
+    const track = TRACKS[nextIndex];
     if (!track) return;
+
+    if (nextIndex === this.trackIndex && this.howl) {
+      if (autoplay && !this.howl.playing()) void this.howl.play();
+      this.onChange?.();
+      return;
+    }
+
+    this.unloadCurrent();
+    this.trackIndex = nextIndex;
+
     this.howl = new Howl({
       src: [track.file],
       html5: true,
       volume: this.musicVolume,
-      autoplay,
+      onload: () => {
+        if (autoplay && this.musicOn) void this.howl?.play();
+      },
+      onloaderror: (_id, err) => console.warn("Track load failed:", track.file, err),
+      onplayerror: () => {
+        this.musicOn = false;
+        this.onChange?.();
+      },
       onend: () => this.next(),
       onplay: () => this.onChange?.(),
       onpause: () => this.onChange?.(),
@@ -165,8 +189,9 @@ export class AudioEngine {
   prev() { this.loadTrack(this.trackIndex - 1, this.musicOn); }
 
   playIndex(index: number) {
-    this.loadTrack(index, true);
     this.musicOn = true;
+    this.loadTrack(index, true);
+    this.onChange?.();
   }
 
   setMusicVolume(v: number) {
@@ -175,8 +200,7 @@ export class AudioEngine {
   }
 
   dispose() {
-    this.howl?.unload();
-    this.howl = null;
+    this.unloadCurrent();
     void this.ctx?.close();
     this.ctx = null;
   }

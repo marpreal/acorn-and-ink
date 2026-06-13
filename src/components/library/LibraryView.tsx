@@ -1,13 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Check, ExternalLink, Loader2, Plus, RefreshCw, Search } from "lucide-react";
 import type { PublicBook } from "@/lib/openlibrary";
+import { libraryWorkHref } from "@/lib/openlibrary";
 import { FORMATS } from "@/lib/formats";
 import { addPublicBook } from "@/app/(grove)/library/actions";
 import MushroomRating from "@/components/books/MushroomRating";
+import OlSuggestionList from "@/components/library/OlSuggestionList";
+import { useOlSuggestions } from "@/components/library/useOlSuggestions";
 import { useSfx } from "@/components/ambiance/ambiance-context";
 
 const SUGGESTIONS = ["cottagecore", "Studio Ghibli", "fairy tales", "Tolkien", "Berserk", "Susanna Clarke"];
@@ -35,6 +39,8 @@ export default function LibraryView({ existingKeys }: { existingKeys: string[] }
   const [pendingKey, setPendingKey] = useState<string | null>(null);
   const [, start] = useTransition();
   const reqId = useRef(0);
+  const [showSuggest, setShowSuggest] = useState(false);
+  const { suggestions, loading: suggestLoading } = useOlSuggestions(showSuggest ? query : "", 2, 8);
 
   // recommendations
   const [recs, setRecs] = useState<PublicBook[]>([]);
@@ -94,13 +100,17 @@ export default function LibraryView({ existingKeys }: { existingKeys: string[] }
       <motion.article key={b.olKey} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(i * 0.03, 0.4) }}
         className="glass rounded-2xl p-3 flex gap-3">
         <div className="shrink-0 rounded-lg overflow-hidden grid place-items-center" style={{ width: 76, height: 114, background: "rgba(0,0,0,0.3)" }}>
-          {b.coverUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={b.coverUrl} alt="" className="w-full h-full object-cover" loading="lazy" />
-          ) : <span className="text-3xl opacity-50">📖</span>}
+          <Link href={libraryWorkHref(b.olKey)} onClick={() => sfx("page")} className="block w-full h-full">
+            {b.coverUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={b.coverUrl} alt="" className="w-full h-full object-cover" loading="lazy" />
+            ) : <span className="text-3xl opacity-50">📖</span>}
+          </Link>
         </div>
         <div className="flex-1 min-w-0 flex flex-col">
-          <h3 className="font-serif-d leading-tight" style={{ color: "var(--color-vellum)", fontSize: "1rem" }}>{b.title}</h3>
+          <Link href={libraryWorkHref(b.olKey)} onClick={() => sfx("page")} className="hover:underline">
+            <h3 className="font-serif-d leading-tight" style={{ color: "var(--color-vellum)", fontSize: "1rem" }}>{b.title}</h3>
+          </Link>
           <p className="text-xs truncate" style={{ color: "var(--color-moss-300)" }}>{b.author ?? "unknown hand"}{b.year ? ` · ${b.year}` : ""}</p>
           <div className="mt-1.5 flex items-center gap-1.5">
             {b.ratingAverage != null ? (
@@ -142,10 +152,30 @@ export default function LibraryView({ existingKeys }: { existingKeys: string[] }
         </p>
       </header>
 
-      <form onSubmit={(e) => { e.preventDefault(); search(query); }} className="glass rounded-2xl p-3 flex gap-2">
+      <form onSubmit={(e) => { e.preventDefault(); setShowSuggest(false); search(query); }} className="glass rounded-2xl p-3 flex gap-2">
         <div className="relative flex-1">
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#6b4a2b" }} />
-          <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="a title, an author, a feeling…" className="ink-field" style={{ paddingLeft: "2.3rem" }} />
+          <input
+            value={query}
+            onChange={(e) => { setQuery(e.target.value); setShowSuggest(true); }}
+            onFocus={() => setShowSuggest(true)}
+            onBlur={() => { window.setTimeout(() => setShowSuggest(false), 150); }}
+            placeholder="a title, an author, a feeling…"
+            className="ink-field"
+            style={{ paddingLeft: "2.3rem" }}
+            autoComplete="off"
+          />
+          {showSuggest && query.trim().length >= 2 && (
+            <OlSuggestionList
+              items={suggestions}
+              loading={suggestLoading}
+              onPick={(b) => {
+                sfx("page");
+                setShowSuggest(false);
+                router.push(libraryWorkHref(b.olKey));
+              }}
+            />
+          )}
         </div>
         <button type="submit" className="btn btn-ember" disabled={loading}>
           {loading ? <Loader2 size={18} className="animate-spin" /> : <Search size={18} />} Seek

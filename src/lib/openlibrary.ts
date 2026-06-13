@@ -70,3 +70,55 @@ export async function searchPublicBooks(query: string, limit = 24): Promise<Publ
 export function workPageUrl(olKey: string) {
   return `https://openlibrary.org${olKey}`;
 }
+
+export function olKeyToPath(olKey: string): string {
+  return olKey.replace(/^\//, "");
+}
+
+export function olKeyFromPath(path: string): string {
+  return `/${path.replace(/^\/+/, "")}`;
+}
+
+export function libraryWorkHref(olKey: string): string {
+  return `/library/work/${olKeyToPath(olKey)}`;
+}
+
+type RawWork = {
+  title?: string;
+  description?: string | { value?: string };
+  first_publish_date?: string;
+  covers?: number[];
+};
+
+export async function fetchWorkByKey(olKey: string): Promise<(PublicBook & { description: string | null }) | null> {
+  const key = olKey.startsWith("/") ? olKey : `/${olKey}`;
+  const res = await fetch(`https://openlibrary.org${key}.json`, {
+    headers: { "User-Agent": "AcornAndInk/0.1 (personal cozy library)" },
+    next: { revalidate: 60 * 60 },
+  });
+  if (!res.ok) return null;
+  const data = (await res.json()) as RawWork;
+  const description =
+    typeof data.description === "string"
+      ? data.description
+      : typeof data.description?.value === "string"
+        ? data.description.value
+        : null;
+  const coverId = data.covers?.[0] ?? null;
+  const year = data.first_publish_date ? Number.parseInt(data.first_publish_date.slice(0, 4), 10) : null;
+
+  return {
+    olKey: key,
+    title: data.title ?? "Untitled",
+    author: null,
+    year: Number.isFinite(year ?? NaN) ? year : null,
+    coverId,
+    coverUrl: coverUrlFromId(coverId),
+    pageCount: null,
+    editionCount: null,
+    isbn: null,
+    ratingAverage: null,
+    ratingCount: null,
+    description,
+  };
+}

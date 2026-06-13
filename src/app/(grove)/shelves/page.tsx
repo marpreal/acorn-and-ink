@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { toBookDTO } from "@/lib/book-dto";
@@ -9,5 +10,9 @@ export default async function ShelvesPage() {
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
   });
-  return <ShelvesView books={books.map(toBookDTO)} />;
+  return (
+    <Suspense fallback={<div className="p-8 text-sm text-ink/60">Loading shelves…</div>}>
+      <ShelvesView books={books.map(toBookDTO)} />
+    </Suspense>
+  );
 }

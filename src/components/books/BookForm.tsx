@@ -1,12 +1,16 @@
 "use client";
 
 import { useActionState, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Loader2, X } from "lucide-react";
+import { ChevronDown, Loader2, Search, X } from "lucide-react";
 import { createBook, updateBook, type BookActionState } from "@/app/(grove)/shelves/actions";
+import type { PublicBook } from "@/lib/openlibrary";
 import { FORMATS, STATUSES } from "@/lib/formats";
 import type { BookDTO } from "@/lib/book-dto";
 import MushroomRating from "./MushroomRating";
+import OlSuggestionList from "@/components/library/OlSuggestionList";
+import { useOlSuggestions } from "@/components/library/useOlSuggestions";
 import { useSfx } from "@/components/ambiance/ambiance-context";
 
 const init: BookActionState = { ok: false };
@@ -23,12 +27,17 @@ export default function BookForm({
   onClose: () => void;
   onSaved: () => void;
 }) {
+  const router = useRouter();
   const sfx = useSfx();
   const isEdit = !!book;
   const action = isEdit ? updateBook.bind(null, book!.id) : createBook;
   const [state, formAction, pending] = useActionState(action, init);
   const [rating, setRating] = useState<number>(book?.rating ?? 0);
   const [more, setMore] = useState(false);
+  const [olQuery, setOlQuery] = useState("");
+  const [showOlSuggest, setShowOlSuggest] = useState(false);
+  const [prefill, setPrefill] = useState<PublicBook | null>(null);
+  const { suggestions, loading: olLoading } = useOlSuggestions(showOlSuggest ? olQuery : "", 2, 8);
 
   // Keep the latest onSaved without making it an effect dependency (that was
   // re-firing the success chime on every parent re-render).
@@ -40,11 +49,26 @@ export default function BookForm({
     if (state.ok && !handledRef.current) {
       handledRef.current = true;
       sfx("success");
+      if (!isEdit && state.id) {
+        router.push(`/books/${state.id}`);
+        onSavedRef.current();
+        return;
+      }
       onSavedRef.current();
     } else if (state.error) {
       sfx("error");
     }
-  }, [state, sfx]);
+  }, [state, sfx, isEdit, router]);
+
+  useEffect(() => {
+    if (!open) return;
+    handledRef.current = false;
+    setPrefill(null);
+    setOlQuery("");
+    setShowOlSuggest(false);
+    setRating(book?.rating ?? 0);
+    setMore(false);
+  }, [open, book]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
@@ -79,21 +103,65 @@ export default function BookForm({
               </button>
             </div>
 
-            <form action={formAction} onSubmit={() => sfx("page")} className="flex flex-col gap-3">
-              {/* hidden carry-overs */}
+            <form action={formAction} onSubmit={() => sfx("page")} className="flex flex-col gap-3" key={prefill?.olKey ?? book?.id ?? "new"}>
               <input type="hidden" name="rating" value={rating || ""} />
               {isEdit && <input type="hidden" name="olKey" defaultValue={book?.olKey ?? ""} />}
               {isEdit && <input type="hidden" name="isbn" defaultValue={book?.isbn ?? ""} />}
+              {!isEdit && prefill && (
+                <>
+                  <input type="hidden" name="olKey" value={prefill.olKey} readOnly />
+                  <input type="hidden" name="isbn" value={prefill.isbn ?? ""} readOnly />
+                  <input type="hidden" name="coverUrl" value={prefill.coverUrl ?? ""} readOnly />
+                  <input type="hidden" name="publishedYear" value={prefill.year ?? ""} readOnly />
+                  <input type="hidden" name="pageCount" value={prefill.pageCount ?? ""} readOnly />
+                </>
+              )}
+
+              {!isEdit && (
+                <div>
+                  <span className="text-sm font-serif-d" style={{ color: "#5a4225" }}>Find in the public library</span>
+                  <div className="relative mt-1">
+                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "#6b4a2b" }} />
+                    <input
+                      value={olQuery}
+                      onChange={(e) => { setOlQuery(e.target.value); setShowOlSuggest(true); }}
+                      onFocus={() => setShowOlSuggest(true)}
+                      onBlur={() => { window.setTimeout(() => setShowOlSuggest(false), 150); }}
+                      placeholder="start typing a title or author…"
+                      className="ink-field"
+                      style={{ paddingLeft: "2.1rem" }}
+                      autoComplete="off"
+                    />
+                    {showOlSuggest && olQuery.trim().length >= 2 && (
+                      <OlSuggestionList
+                        items={suggestions}
+                        loading={olLoading}
+                        onPick={(b) => {
+                          sfx("sparkle");
+                          setPrefill(b);
+                          setOlQuery(b.title);
+                          setShowOlSuggest(false);
+                        }}
+                      />
+                    )}
+                  </div>
+                  {prefill && (
+                    <p className="text-xs mt-1" style={{ color: "#7a5a2c" }}>
+                      ✓ filled from Open Library — you can still edit below
+                    </p>
+                  )}
+                </div>
+              )}
 
               <label className="block">
                 <span className="text-sm font-serif-d" style={{ color: "#5a4225" }}>Title</span>
-                <input name="title" required maxLength={300} defaultValue={book?.title ?? ""}
-                  placeholder="The Hazel Grove Almanac" className="ink-field mt-1" autoFocus />
+                <input name="title" required maxLength={300} defaultValue={prefill?.title ?? book?.title ?? ""}
+                  placeholder="The Hazel Grove Almanac" className="ink-field mt-1" autoFocus={isEdit} />
               </label>
 
               <label className="block">
                 <span className="text-sm font-serif-d" style={{ color: "#5a4225" }}>Author</span>
-                <input name="author" maxLength={200} defaultValue={book?.author ?? ""}
+                <input name="author" maxLength={200} defaultValue={prefill?.author ?? book?.author ?? ""}
                   placeholder="by whose hand?" className="ink-field mt-1" />
               </label>
 
@@ -130,7 +198,7 @@ export default function BookForm({
                 <div className="flex flex-col gap-3 rounded-xl p-3" style={{ background: "rgba(120,86,46,0.08)" }}>
                   <label className="block">
                     <span className="text-sm font-serif-d" style={{ color: "#5a4225" }}>Cover image URL</span>
-                    <input name="coverUrl" maxLength={1200} defaultValue={book?.coverUrl ?? ""}
+                    <input name="coverUrl" maxLength={1200} defaultValue={prefill?.coverUrl ?? book?.coverUrl ?? ""}
                       placeholder="https://…" className="ink-field mt-1" />
                   </label>
                   <div className="grid grid-cols-3 gap-3">
@@ -154,7 +222,7 @@ export default function BookForm({
                     </label>
                     <label className="block">
                       <span className="text-xs font-serif-d" style={{ color: "#5a4225" }}>Year</span>
-                      <input name="publishedYear" type="number" min={0} defaultValue={book?.publishedYear ?? ""} className="ink-field mt-1" />
+                      <input name="publishedYear" type="number" min={0} defaultValue={prefill?.year ?? book?.publishedYear ?? ""} className="ink-field mt-1" />
                     </label>
                   </div>
                   <label className="block">

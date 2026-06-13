@@ -41,6 +41,11 @@ export default function MusicPlayer() {
   const album = ALBUMS.find((al) => al.id === albumId) ?? null;
 
   useEffect(() => {
+    setPos(0);
+    setDur(0);
+  }, [a.trackIndex]);
+
+  useEffect(() => {
     if (!open) return;
     const id = setInterval(() => { setPos(engine.position()); setDur(engine.duration()); }, 300);
     return () => clearInterval(id);

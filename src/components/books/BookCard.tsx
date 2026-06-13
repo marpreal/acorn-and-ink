@@ -62,26 +62,30 @@ export default function BookCard({
       )}
 
       <div className="shrink-0 rounded-lg overflow-hidden" style={{ width: 72, height: 108, boxShadow: "0 8px 18px -10px rgba(0,0,0,0.8)" }}>
-        {book.coverUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={book.coverUrl} alt="" className="w-full h-full object-cover" loading="lazy" />
-        ) : (
-          <div className="w-full h-full grid place-items-center p-1.5 text-center"
-            style={{
-              background: `linear-gradient(150deg, ${fmt.accent}33, #2a1d0f), repeating-linear-gradient(180deg, rgba(0,0,0,0.08) 0 3px, transparent 3px 7px)`,
-              borderLeft: `4px solid ${fmt.accent}`,
-            }}>
-            <span className="text-[0.6rem] leading-tight font-serif-d" style={{ color: "var(--color-vellum)" }}>{book.title}</span>
-          </div>
-        )}
+        <Link href={`/books/${book.id}`} onClick={() => sfx("page")} className="block w-full h-full">
+          {book.coverUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={book.coverUrl} alt="" className="w-full h-full object-cover" loading="lazy" />
+          ) : (
+            <div className="w-full h-full grid place-items-center p-1.5 text-center"
+              style={{
+                background: `linear-gradient(150deg, ${fmt.accent}33, #2a1d0f), repeating-linear-gradient(180deg, rgba(0,0,0,0.08) 0 3px, transparent 3px 7px)`,
+                borderLeft: `4px solid ${fmt.accent}`,
+              }}>
+              <span className="text-[0.6rem] leading-tight font-serif-d" style={{ color: "var(--color-vellum)" }}>{book.title}</span>
+            </div>
+          )}
+        </Link>
       </div>
 
       <div className="flex-1 min-w-0 flex flex-col">
         <div className="flex items-start gap-1.5">
           <span title={fmt.label}>{fmt.glyph}</span>
-          <h3 className="font-serif-d leading-tight truncate" style={{ color: "var(--color-vellum)", fontSize: "1.05rem" }} title={book.title}>
-            {book.title}
-          </h3>
+          <Link href={`/books/${book.id}`} onClick={() => sfx("page")} className="min-w-0 flex-1">
+            <h3 className="font-serif-d leading-tight truncate hover:underline" style={{ color: "var(--color-vellum)", fontSize: "1.05rem" }} title={book.title}>
+              {book.title}
+            </h3>
+          </Link>
         </div>
         <p className="text-xs truncate" style={{ color: "var(--color-moss-300)" }}>
           {book.author ?? "unknown hand"}

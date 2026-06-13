@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, LayoutGroup } from "framer-motion";
 import { Plus, Search } from "lucide-react";
 import { FORMATS, STATUSES, type FormatKey, type StatusKey } from "@/lib/formats";
@@ -14,6 +14,7 @@ type SortKey = "recent" | "title" | "rating";
 
 export default function ShelvesView({ books: initialBooks }: { books: BookDTO[] }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const sfx = useSfx();
   const [books, setBooks] = useState<BookDTO[]>(initialBooks);
   const [query, setQuery] = useState("");
@@ -25,6 +26,16 @@ export default function ShelvesView({ books: initialBooks }: { books: BookDTO[] 
 
   // keep local list in step with the server (after refresh / revalidate)
   useEffect(() => { setBooks(initialBooks); }, [initialBooks]);
+
+  useEffect(() => {
+    const editId = searchParams.get("edit");
+    if (!editId) return;
+    const book = initialBooks.find((b) => b.id === editId);
+    if (book) {
+      setFormBook(book);
+      setFormOpen(true);
+    }
+  }, [searchParams, initialBooks]);
 
   const onLocalRemove = useCallback((id: string) => {
     setBooks((prev) => prev.filter((b) => b.id !== id));

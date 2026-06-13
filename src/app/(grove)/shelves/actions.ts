@@ -50,6 +50,7 @@ function revalidate() {
   revalidatePath("/shelves");
   revalidatePath("/dashboard");
   revalidatePath("/stats");
+  revalidatePath("/books");
 }
 
 function parse(fd: FormData) {

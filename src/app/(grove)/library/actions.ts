@@ -55,5 +55,6 @@ export async function addPublicBook(input: unknown): Promise<AddResult> {
   revalidatePath("/dashboard");
   revalidatePath("/stats");
   revalidatePath("/library");
+  revalidatePath("/books");
   return { ok: true };
 }
