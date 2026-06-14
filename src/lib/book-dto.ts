@@ -17,6 +17,8 @@ export type BookDTO = {
   totalVolumes: number | null;
   pageCount: number | null;
   currentPage: number | null;
+  totalChapters: number | null;
+  currentChapter: number | null;
   isbn: string | null;
   olKey: string | null;
   publishedYear: number | null;
@@ -43,6 +45,8 @@ export function toBookDTO(b: Book): BookDTO {
     totalVolumes: b.totalVolumes,
     pageCount: b.pageCount,
     currentPage: b.currentPage,
+    totalChapters: b.totalChapters,
+    currentChapter: b.currentChapter,
     isbn: b.isbn,
     olKey: b.olKey,
     publishedYear: b.publishedYear,

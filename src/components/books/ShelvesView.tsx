@@ -8,6 +8,7 @@ import { FORMATS, STATUSES, isFormat, isStatus, type FormatKey, type StatusKey }
 import type { BookDTO } from "@/lib/book-dto";
 import BookCard from "./BookCard";
 import BookForm from "./BookForm";
+import { FormatCritter, StatusCritter, Sprout } from "@/components/critters/Critters";
 import { useSfx } from "@/components/ambiance/ambiance-context";
 
 type SortKey = "recent" | "title" | "rating";
@@ -102,7 +103,7 @@ export default function ShelvesView({ books: initialBooks }: { books: BookDTO[] 
           <button className="chip" data-active={fmt === "all"} onClick={() => { sfx("tap"); setFmt("all"); }}>All kinds</button>
           {FORMATS.map((f) => (
             <button key={f.key} className="chip" data-active={fmt === f.key} onClick={() => { sfx("tap"); setFmt(f.key); }}>
-              {f.glyph} {f.plural}
+              <FormatCritter format={f.key} size={16} /> {f.plural}
             </button>
           ))}
         </div>
@@ -110,7 +111,7 @@ export default function ShelvesView({ books: initialBooks }: { books: BookDTO[] 
           <button className="chip" data-active={status === "all"} onClick={() => { sfx("tap"); setStatus("all"); }}>Any standing</button>
           {STATUSES.map((s) => (
             <button key={s.key} className="chip" data-active={status === s.key} onClick={() => { sfx("tap"); setStatus(s.key); }}>
-              {s.glyph} {s.label}
+              <StatusCritter status={s.key} size={15} /> {s.label}
             </button>
           ))}
         </div>
@@ -118,7 +119,7 @@ export default function ShelvesView({ books: initialBooks }: { books: BookDTO[] 
 
       {books.length === 0 ? (
         <div className="parchment p-8 text-center">
-          <div className="text-5xl mb-2">🌱</div>
+          <Sprout size={56} className="mx-auto mb-2 anim-sway" />
           <h2 className="font-display" style={{ fontSize: "1.6rem", color: "#2c2113" }}>Bare shelves, full of promise</h2>
           <p className="mt-2" style={{ color: "#5a4225" }}>Plant your first book to begin your wood.</p>
           <button onClick={openAdd} className="btn btn-ember mt-4"><Plus size={18} /> Add a book</button>
@@ -137,7 +138,7 @@ export default function ShelvesView({ books: initialBooks }: { books: BookDTO[] 
                 <section key={f.key}>
                   <div className="flex items-center gap-2 mb-3">
                     <span className="wood-panel rounded-lg px-3 py-1.5 font-serif-d flex items-center gap-2" style={{ color: "var(--color-glow)" }}>
-                      <span className="text-lg">{f.glyph}</span> {f.plural}
+                      <FormatCritter format={f.key} size={22} /> {f.plural}
                     </span>
                     <span className="text-sm" style={{ color: "var(--color-moss-300)" }}>{items.length}</span>
                     <span className="font-hand text-base" style={{ color: "var(--color-moss-400)" }}>· {f.blurb}</span>

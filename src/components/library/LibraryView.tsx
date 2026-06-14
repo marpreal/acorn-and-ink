@@ -103,7 +103,7 @@ export default function LibraryView({ existingKeys }: { existingKeys: string[] }
           <Link href={libraryWorkHref(b.olKey)} onClick={() => sfx("page")} className="block w-full h-full">
             {b.coverUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={b.coverUrl} alt="" className="w-full h-full object-cover" loading="lazy" />
+              <img src={b.coverUrl} alt="" className="w-full h-full object-cover" loading="lazy" referrerPolicy="no-referrer" />
             ) : <span className="text-3xl opacity-50">📖</span>}
           </Link>
         </div>

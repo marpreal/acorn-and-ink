@@ -9,6 +9,8 @@ import { setBookStatus, setBookRating, deleteBook } from "@/app/(grove)/shelves/
 import { formatMeta, statusMeta, STATUSES } from "@/lib/formats";
 import type { BookDTO } from "@/lib/book-dto";
 import MushroomRating from "./MushroomRating";
+import ReadingProgress from "./ReadingProgress";
+import { FormatCritter } from "@/components/critters/Critters";
 import { useSfx } from "@/components/ambiance/ambiance-context";
 
 export default function BookCard({
@@ -65,7 +67,7 @@ export default function BookCard({
         <Link href={`/books/${book.id}`} onClick={() => sfx("page")} className="block w-full h-full">
           {book.coverUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={book.coverUrl} alt="" className="w-full h-full object-cover" loading="lazy" />
+            <img src={book.coverUrl} alt="" className="w-full h-full object-cover" loading="lazy" referrerPolicy="no-referrer" />
           ) : (
             <div className="w-full h-full grid place-items-center p-1.5 text-center"
               style={{
@@ -80,7 +82,7 @@ export default function BookCard({
 
       <div className="flex-1 min-w-0 flex flex-col">
         <div className="flex items-start gap-1.5">
-          <span title={fmt.label}>{fmt.glyph}</span>
+          <FormatCritter format={book.format} size={20} title={fmt.label} style={{ marginTop: 1 }} />
           <Link href={`/books/${book.id}`} onClick={() => sfx("page")} className="min-w-0 flex-1">
             <h3 className="font-serif-d leading-tight truncate hover:underline" style={{ color: "var(--color-vellum)", fontSize: "1.05rem" }} title={book.title}>
               {book.title}
@@ -94,6 +96,10 @@ export default function BookCard({
 
         <div className="mt-1.5">
           <MushroomRating value={book.rating} size={16} onRate={rate} />
+        </div>
+
+        <div className="mt-2">
+          <ReadingProgress book={book} size="compact" onLocalUpdate={(patch) => onLocalUpdate(book.id, patch)} />
         </div>
 
         <div className="mt-auto pt-2 flex items-center gap-1.5 flex-wrap">

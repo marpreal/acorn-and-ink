@@ -48,6 +48,8 @@ model Book {
   totalVolumes  Int?
   pageCount     Int?
   currentPage   Int?
+  totalChapters Int?
+  currentChapter Int?
   isbn          String?
   olKey         String?
   publishedYear Int?

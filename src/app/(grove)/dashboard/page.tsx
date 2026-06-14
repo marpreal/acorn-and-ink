@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { BookMarked, Library, ScrollText, Sprout } from "lucide-react";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getReadingStats } from "@/lib/stats";
-import { formatMeta, shelvesHref, statusMeta } from "@/lib/formats";
+import { shelvesHref } from "@/lib/formats";
+import { readingProgress } from "@/lib/progress";
+import { Toadstool, Sprout, Fairy, Oak, Quill, FormatCritter, StatusCritter, type Critter } from "@/components/critters/Critters";
 
 function greeting() {
   const h = new Date().getHours();
@@ -13,18 +14,18 @@ function greeting() {
   return "Good evening";
 }
 
-const stones = (s: Awaited<ReturnType<typeof getReadingStats>>) => [
-  { glyph: "🍄", label: `Read in ${s.year}`, value: s.readThisYear, accent: "var(--color-toadstool-bright)", href: shelvesHref({ status: "read" }) },
-  { glyph: "🌿", label: "Reading now", value: s.currentlyReading, accent: "var(--color-moss-300)", href: shelvesHref({ status: "reading" }) },
-  { glyph: "🕯️", label: "On the wishlist", value: s.wishlisted, accent: "var(--color-candle)", href: shelvesHref({ status: "want" }) },
-  { glyph: "📚", label: "Tomes in all", value: s.total, accent: "var(--color-wisp)", href: shelvesHref() },
+const stones = (s: Awaited<ReturnType<typeof getReadingStats>>): { critter: Critter; label: string; value: number; accent: string; href: string }[] => [
+  { critter: Toadstool, label: `Read in ${s.year}`, value: s.readThisYear, accent: "var(--color-toadstool-bright)", href: shelvesHref({ status: "read" }) },
+  { critter: Sprout, label: "Reading now", value: s.currentlyReading, accent: "var(--color-moss-300)", href: shelvesHref({ status: "reading" }) },
+  { critter: Fairy, label: "On the wishlist", value: s.wishlisted, accent: "var(--color-candle)", href: shelvesHref({ status: "want" }) },
+  { critter: Oak, label: "Tomes in all", value: s.total, accent: "var(--color-wisp)", href: shelvesHref() },
 ];
 
-const paths = [
-  { href: "/shelves", icon: BookMarked, title: "My Shelves", text: "Add, tend and rate your novels, manga and comics." },
-  { href: "/library", icon: Library, title: "Public Library", text: "Search the world's books and bring some home." },
-  { href: "/journal", icon: ScrollText, title: "Journal", text: "Your reading to-do list and private marginalia." },
-  { href: "/stats", icon: Sprout, title: "Stats Grove", text: "Watch this year's reading grow, by kind and in whole." },
+const paths: { href: string; critter: Critter; title: string; text: string }[] = [
+  { href: "/shelves", critter: Toadstool, title: "My Shelves", text: "Add, tend and rate your novels, manga and comics." },
+  { href: "/library", critter: Oak, title: "Public Library", text: "Search the world's books and bring some home." },
+  { href: "/journal", critter: Quill, title: "Journal", text: "Your reading to-do list and private marginalia." },
+  { href: "/stats", critter: Sprout, title: "Stats Grove", text: "Watch this year's reading grow, by kind and in whole." },
 ];
 
 export default async function DashboardPage() {
@@ -53,7 +54,7 @@ export default async function DashboardPage() {
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stones(stats).map((st, i) => (
           <Link key={st.label} href={st.href} className="glass rounded-2xl p-5 anim-grow transition hover:-translate-y-0.5" style={{ animationDelay: `${i * 60}ms` }}>
-            <div className="text-3xl">{st.glyph}</div>
+            <st.critter size={34} className="anim-floaty" style={{ animationDuration: `${6 + i}s` }} />
             <div className="font-display mt-1" style={{ fontSize: "2.4rem", color: st.accent, lineHeight: 1 }}>
               {st.value}
             </div>
@@ -89,17 +90,25 @@ export default async function DashboardPage() {
                 </p>
               ) : (
                 <ul className="mt-3 flex flex-col gap-2">
-                  {reading.map((b) => (
-                    <li key={b.id}>
-                      <Link href={`/books/${b.id}`} className="flex items-center gap-3 rounded-xl px-3 py-2 transition hover:bg-white/5" style={{ background: "rgba(255,255,255,0.03)" }}>
-                        <span className="text-xl">{formatMeta(b.format).glyph}</span>
-                        <div className="min-w-0">
-                          <div className="truncate" style={{ color: "var(--color-vellum)" }}>{b.title}</div>
-                          <div className="text-xs truncate" style={{ color: "var(--color-moss-300)" }}>{b.author ?? "unknown hand"}</div>
-                        </div>
-                      </Link>
-                    </li>
-                  ))}
+                  {reading.map((b) => {
+                    const pr = readingProgress(b);
+                    return (
+                      <li key={b.id}>
+                        <Link href={`/books/${b.id}`} className="flex items-center gap-3 rounded-xl px-3 py-2 transition hover:bg-white/5" style={{ background: "rgba(255,255,255,0.03)" }}>
+                          <FormatCritter format={b.format} size={24} />
+                          <div className="min-w-0 flex-1">
+                            <div className="truncate" style={{ color: "var(--color-vellum)" }}>{b.title}</div>
+                            <div className="text-xs truncate" style={{ color: "var(--color-moss-300)" }}>{b.author ?? "unknown hand"}</div>
+                          </div>
+                          {pr.has && (
+                            <span className="text-xs shrink-0 font-serif-d" style={{ color: "var(--color-candle)" }}>
+                              {pr.unit === "chapter" ? "ch." : "p."} {pr.current ?? "—"}{pr.total != null ? `/${pr.total}` : ""}
+                            </span>
+                          )}
+                        </Link>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </div>
@@ -110,9 +119,9 @@ export default async function DashboardPage() {
                 {recent.map((b) => (
                   <li key={b.id}>
                     <Link href={`/books/${b.id}`} className="chip transition hover:-translate-y-0.5">
-                      <span>{formatMeta(b.format).glyph}</span>
+                      <FormatCritter format={b.format} size={16} />
                       <span className="truncate max-w-[12rem]">{b.title}</span>
-                      <span style={{ color: statusMeta(b.status).accent }}>{statusMeta(b.status).glyph}</span>
+                      <StatusCritter status={b.status} size={15} />
                     </Link>
                   </li>
                 ))}
@@ -144,7 +153,7 @@ export default async function DashboardPage() {
       <section className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {paths.map((p) => (
           <Link key={p.href} href={p.href} className="glass rounded-2xl p-5 transition hover:-translate-y-0.5">
-            <p.icon size={24} style={{ color: "var(--color-candle)" }} />
+            <p.critter size={28} />
             <h3 className="font-serif-d text-lg mt-2" style={{ color: "var(--color-vellum)" }}>{p.title}</h3>
             <p className="text-sm mt-1" style={{ color: "var(--color-moss-200)" }}>{p.text}</p>
           </Link>

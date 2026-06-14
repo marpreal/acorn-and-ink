@@ -32,7 +32,7 @@ export default function OlSuggestionList({
             <div className="shrink-0 rounded overflow-hidden grid place-items-center" style={{ width: 34, height: 50, background: "#d9c79f" }}>
               {b.coverUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={b.coverUrl} alt="" className="w-full h-full object-cover" />
+                <img src={b.coverUrl} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               ) : (
                 <span>📖</span>
               )}

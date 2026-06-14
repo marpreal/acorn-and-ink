@@ -7,6 +7,8 @@ import { toBookDTO } from "@/lib/book-dto";
 import { formatMeta, statusMeta } from "@/lib/formats";
 import { fetchWorkByKey, libraryWorkHref, workPageUrl } from "@/lib/openlibrary";
 import MushroomRating from "@/components/books/MushroomRating";
+import ReadingProgress from "@/components/books/ReadingProgress";
+import { FormatCritter } from "@/components/critters/Critters";
 
 export default async function BookDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const user = await requireUser();
@@ -36,7 +38,7 @@ export default async function BookDetailPage({ params }: { params: Promise<{ id:
         <div className="shrink-0 rounded-xl overflow-hidden mx-auto sm:mx-0" style={{ width: 140, height: 210, boxShadow: "0 12px 28px -14px rgba(0,0,0,0.85)" }}>
           {dto.coverUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={dto.coverUrl} alt="" className="w-full h-full object-cover" />
+            <img src={dto.coverUrl} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
           ) : (
             <div className="w-full h-full grid place-items-center p-3 text-center"
               style={{ background: `linear-gradient(150deg, ${fmt.accent}33, #2a1d0f)` }}>
@@ -46,7 +48,9 @@ export default async function BookDetailPage({ params }: { params: Promise<{ id:
         </div>
 
         <div className="flex-1 min-w-0">
-          <p className="text-sm" style={{ color: fmt.accent }}>{fmt.glyph} {fmt.label}</p>
+          <p className="text-sm inline-flex items-center gap-1.5" style={{ color: fmt.accent }}>
+            <FormatCritter format={dto.format} size={18} /> {fmt.label}
+          </p>
           <h1 className="font-display glow-text mt-1" style={{ fontSize: "clamp(1.6rem,4vw,2.4rem)" }}>{dto.title}</h1>
           <p style={{ color: "var(--color-moss-200)" }}>
             {dto.author ?? "unknown hand"}
@@ -64,6 +68,11 @@ export default async function BookDetailPage({ params }: { params: Promise<{ id:
           <div className="mt-3">
             <p className="text-xs mb-1" style={{ color: "var(--color-moss-300)" }}>Your mushrooms</p>
             <MushroomRating value={dto.rating} size={22} />
+          </div>
+
+          <div className="mt-4 rounded-xl p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(159,174,100,0.14)" }}>
+            <p className="text-xs mb-2" style={{ color: "var(--color-moss-300)" }}>How far you&apos;ve wandered</p>
+            <ReadingProgress book={dto} size="full" force />
           </div>
 
           <div className="mt-4 flex flex-wrap gap-2">

@@ -7,7 +7,9 @@ import { ChevronDown, Loader2, Search, X } from "lucide-react";
 import { createBook, updateBook, type BookActionState } from "@/app/(grove)/shelves/actions";
 import type { PublicBook } from "@/lib/openlibrary";
 import { FORMATS, STATUSES } from "@/lib/formats";
+import { usesChapters } from "@/lib/progress";
 import type { BookDTO } from "@/lib/book-dto";
+import { FormatCritter } from "@/components/critters/Critters";
 import MushroomRating from "./MushroomRating";
 import OlSuggestionList from "@/components/library/OlSuggestionList";
 import { useOlSuggestions } from "@/components/library/useOlSuggestions";
@@ -33,6 +35,7 @@ export default function BookForm({
   const action = isEdit ? updateBook.bind(null, book!.id) : createBook;
   const [state, formAction, pending] = useActionState(action, init);
   const [rating, setRating] = useState<number>(book?.rating ?? 0);
+  const [fmt, setFmt] = useState<string>(book?.format ?? "novel");
   const [more, setMore] = useState(false);
   const [olQuery, setOlQuery] = useState("");
   const [showOlSuggest, setShowOlSuggest] = useState(false);
@@ -67,6 +70,7 @@ export default function BookForm({
     setOlQuery("");
     setShowOlSuggest(false);
     setRating(book?.rating ?? 0);
+    setFmt(book?.format ?? "novel");
     setMore(false);
   }, [open, book]);
 
@@ -113,7 +117,6 @@ export default function BookForm({
                   <input type="hidden" name="isbn" value={prefill.isbn ?? ""} readOnly />
                   <input type="hidden" name="coverUrl" value={prefill.coverUrl ?? ""} readOnly />
                   <input type="hidden" name="publishedYear" value={prefill.year ?? ""} readOnly />
-                  <input type="hidden" name="pageCount" value={prefill.pageCount ?? ""} readOnly />
                 </>
               )}
 
@@ -168,7 +171,7 @@ export default function BookForm({
               <div className="grid grid-cols-2 gap-3">
                 <label className="block">
                   <span className="text-sm font-serif-d" style={{ color: "#5a4225" }}>Kind</span>
-                  <select name="format" defaultValue={book?.format ?? "novel"} className="ink-field mt-1">
+                  <select name="format" value={fmt} onChange={(e) => { sfx("tap"); setFmt(e.target.value); }} className="ink-field mt-1">
                     {FORMATS.map((f) => <option key={f.key} value={f.key}>{f.glyph} {f.label}</option>)}
                   </select>
                 </label>
@@ -178,6 +181,35 @@ export default function BookForm({
                     {STATUSES.map((s) => <option key={s.key} value={s.key}>{s.glyph} {s.label}</option>)}
                   </select>
                 </label>
+              </div>
+
+              <div className="rounded-xl p-3" style={{ background: "rgba(120,86,46,0.08)" }}>
+                <span className="text-sm font-serif-d flex items-center gap-1.5" style={{ color: "#5a4225" }}>
+                  <FormatCritter format={fmt} size={18} /> Where you are now
+                </span>
+                {usesChapters(fmt) ? (
+                  <div className="grid grid-cols-2 gap-3 mt-1">
+                    <label className="block">
+                      <span className="text-xs font-serif-d" style={{ color: "#5a4225" }}>On chapter</span>
+                      <input name="currentChapter" type="number" min={0} defaultValue={book?.currentChapter ?? ""} placeholder="—" className="ink-field mt-1" />
+                    </label>
+                    <label className="block">
+                      <span className="text-xs font-serif-d" style={{ color: "#5a4225" }}>of how many</span>
+                      <input name="totalChapters" type="number" min={0} defaultValue={book?.totalChapters ?? ""} placeholder="total" className="ink-field mt-1" />
+                    </label>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3 mt-1">
+                    <label className="block">
+                      <span className="text-xs font-serif-d" style={{ color: "#5a4225" }}>On page</span>
+                      <input name="currentPage" type="number" min={0} defaultValue={book?.currentPage ?? ""} placeholder="—" className="ink-field mt-1" />
+                    </label>
+                    <label className="block">
+                      <span className="text-xs font-serif-d" style={{ color: "#5a4225" }}>of how many</span>
+                      <input name="pageCount" type="number" min={0} defaultValue={prefill?.pageCount ?? book?.pageCount ?? ""} placeholder="total" className="ink-field mt-1" />
+                    </label>
+                  </div>
+                )}
               </div>
 
               <div className="flex items-center gap-3 mt-1">
@@ -217,18 +249,14 @@ export default function BookForm({
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <label className="block">
-                      <span className="text-xs font-serif-d" style={{ color: "#5a4225" }}>Pages</span>
-                      <input name="pageCount" type="number" min={0} defaultValue={book?.pageCount ?? ""} className="ink-field mt-1" />
-                    </label>
-                    <label className="block">
                       <span className="text-xs font-serif-d" style={{ color: "#5a4225" }}>Year</span>
                       <input name="publishedYear" type="number" min={0} defaultValue={prefill?.year ?? book?.publishedYear ?? ""} className="ink-field mt-1" />
                     </label>
+                    <label className="block">
+                      <span className="text-xs font-serif-d" style={{ color: "#5a4225" }}>Publisher</span>
+                      <input name="publisher" defaultValue={book?.publisher ?? ""} className="ink-field mt-1" />
+                    </label>
                   </div>
-                  <label className="block">
-                    <span className="text-xs font-serif-d" style={{ color: "#5a4225" }}>Publisher</span>
-                    <input name="publisher" defaultValue={book?.publisher ?? ""} className="ink-field mt-1" />
-                  </label>
                   <div className="grid grid-cols-2 gap-3">
                     <label className="block">
                       <span className="text-xs font-serif-d" style={{ color: "#5a4225" }}>Started</span>

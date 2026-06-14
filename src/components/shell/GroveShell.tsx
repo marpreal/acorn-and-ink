@@ -5,15 +5,16 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Flame, BookMarked, Library, ScrollText, Sprout, LogOut, Menu, X } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import { signOutAction } from "@/app/enter/actions";
 import { useSfx } from "@/components/ambiance/ambiance-context";
+import { HearthStump, Toadstool, Oak, Quill, Sprout, type Critter } from "@/components/critters/Critters";
 
-const NAV = [
-  { href: "/dashboard", label: "The Hearth", icon: Flame },
-  { href: "/shelves", label: "My Shelves", icon: BookMarked },
-  { href: "/library", label: "Public Library", icon: Library },
-  { href: "/journal", label: "Journal", icon: ScrollText },
+const NAV: { href: string; label: string; icon: Critter }[] = [
+  { href: "/dashboard", label: "The Hearth", icon: HearthStump },
+  { href: "/shelves", label: "My Shelves", icon: Toadstool },
+  { href: "/library", label: "Public Library", icon: Oak },
+  { href: "/journal", label: "Journal", icon: Quill },
   { href: "/stats", label: "Stats Grove", icon: Sprout },
 ];
 

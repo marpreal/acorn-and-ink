@@ -42,7 +42,7 @@ export default async function LibraryWorkPage({ params }: { params: Promise<{ ol
           style={{ width: 140, height: 210, background: "rgba(0,0,0,0.3)" }}>
           {merged.coverUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={merged.coverUrl} alt="" className="w-full h-full object-cover" />
+            <img src={merged.coverUrl} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
           ) : (
             <span className="text-4xl opacity-60">📖</span>
           )}

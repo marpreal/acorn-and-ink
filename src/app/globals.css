@@ -281,6 +281,58 @@ a {
     background: linear-gradient(90deg, transparent, rgba(159, 174, 100, 0.4), transparent);
   }
 
+  /* ── Reading progress: a vine the reader's snail creeps along ── */
+  .vine-track {
+    position: relative;
+    height: 7px;
+    border-radius: 999px;
+    background:
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 6px),
+      linear-gradient(180deg, rgba(44, 63, 41, 0.9), rgba(22, 35, 26, 0.95));
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.55), inset 0 0 0 1px rgba(159, 174, 100, 0.14);
+  }
+  .vine-fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    min-width: 7px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--color-moss-500), var(--color-moss-300) 65%, var(--color-candle));
+    box-shadow: 0 0 10px -2px rgba(245, 196, 81, 0.55);
+    transition: width 0.45s var(--ease-soft);
+  }
+  .vine-marker {
+    position: absolute;
+    top: 50%;
+    transform: translate(-55%, -58%);
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+    transition: left 0.45s var(--ease-soft);
+    pointer-events: none;
+  }
+
+  /* Little round acorn-buttons for nudging progress */
+  .bump-pip {
+    display: inline-grid;
+    place-items: center;
+    width: 1.55rem;
+    height: 1.55rem;
+    border-radius: 999px;
+    color: var(--color-moss-100, #c0cb8f);
+    background: linear-gradient(180deg, rgba(60, 82, 52, 0.7), rgba(28, 46, 32, 0.8));
+    border: 1px solid rgba(159, 174, 100, 0.3);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+    cursor: pointer;
+    transition: transform 0.15s var(--ease-soft), filter 0.15s, background 0.15s;
+  }
+  .bump-pip:hover { transform: translateY(-1px); filter: brightness(1.15); }
+  .bump-pip:active { transform: translateY(1px); }
+  .bump-pip:disabled { opacity: 0.4; cursor: not-allowed; transform: none; filter: none; }
+  .bump-pip[data-dir="up"] {
+    color: #2a1408;
+    background: linear-gradient(180deg, var(--color-ember), var(--color-toadstool));
+    border-color: rgba(255, 196, 100, 0.45);
+    box-shadow: 0 0 14px -4px rgba(255, 178, 77, 0.7);
+  }
+
   .lantern-link {
     position: relative;
     display: inline-flex;
@@ -321,6 +373,12 @@ a {
 @keyframes growIn {
   from { opacity: 0; transform: translateY(14px) scale(0.98); }
   to { opacity: 1; transform: translateY(0) scale(1); }
+}
+/* Critters & leaves tumbling down through the canopy */
+@keyframes drift {
+  0% { transform: translateY(-8vh) translateX(0) rotate(0deg); opacity: 0; }
+  8% { opacity: var(--drift-op, 0.8); }
+  100% { transform: translateY(108vh) translateX(var(--drift-x, 40px)) rotate(var(--drift-spin, 220deg)); opacity: 0; }
 }
 
 .anim-flicker { animation: flicker 3.5s ease-in-out infinite; }

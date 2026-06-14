@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef } from "react";
 import { useAmbiance } from "@/components/ambiance/ambiance-context";
+import { Acorn, Toadstool, Leaf, Blossom, MushroomDot, type Critter } from "@/components/critters/Critters";
 
 /* The candle that lights your way: a flame follows the pointer, pooling warm
    light over the page and scattering sparks when you press. */
@@ -175,38 +176,44 @@ function Fireflies({ count = 22 }: { count?: number }) {
   );
 }
 
-function FallingLeaves({ count = 12 }: { count?: number }) {
-  const leaves = useMemo(
+// The wood sheds its small folk: acorns, toadstool caps, leaves and blossoms
+// tumble down through the canopy on the `drift` keyframe.
+const DRIFTERS: Critter[] = [Leaf, Acorn, Leaf, Toadstool, Blossom, MushroomDot, Acorn, Leaf];
+
+function FallingCritters({ count = 11 }: { count?: number }) {
+  const items = useMemo(
     () =>
       Array.from({ length: count }).map((_, i) => ({
         id: i,
         left: Math.random() * 100,
-        dur: 9 + Math.random() * 12,
-        delay: Math.random() * 14,
-        drift: (Math.random() * 120 - 30).toFixed(0),
-        glyph: ["🍂", "🍁", "🍃"][Math.floor(Math.random() * 3)],
-        size: 12 + Math.random() * 12,
-        op: 0.5 + Math.random() * 0.4,
+        dur: 11 + Math.random() * 13,
+        delay: Math.random() * 16,
+        drift: (Math.random() * 160 - 50).toFixed(0),
+        spin: (Math.random() * 360 - 120).toFixed(0),
+        size: 16 + Math.random() * 16,
+        op: (0.4 + Math.random() * 0.4).toFixed(2),
+        Critter: DRIFTERS[Math.floor(Math.random() * DRIFTERS.length)],
       })),
     [count]
   );
   return (
     <div aria-hidden className="fixed inset-0 z-[1] pointer-events-none overflow-hidden">
-      {leaves.map((l) => (
+      {items.map((l) => (
         <span
           key={l.id}
           style={{
             position: "absolute",
             left: `${l.left}%`,
             top: 0,
-            fontSize: l.size,
-            opacity: l.op,
-            // @ts-expect-error custom prop consumed by the drift keyframe
+            willChange: "transform, opacity",
+            // @ts-expect-error custom props consumed by the drift keyframe
             "--drift-x": `${l.drift}px`,
+            "--drift-spin": `${l.spin}deg`,
+            "--drift-op": l.op,
             animation: `drift ${l.dur}s linear ${l.delay}s infinite`,
           }}
         >
-          {l.glyph}
+          <l.Critter size={l.size} style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.45))" }} />
         </span>
       ))}
     </div>
@@ -229,7 +236,7 @@ export default function Atmosphere() {
         }}
       />
       {!reducedMotion && <Fireflies />}
-      {!reducedMotion && <FallingLeaves />}
+      {!reducedMotion && <FallingCritters />}
       {!isTouch && <CandleCursor lively={!reducedMotion} />}
     </>
   );

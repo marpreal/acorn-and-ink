@@ -22,6 +22,9 @@ const bookSchema = z.object({
   volume: z.number().int().min(0).max(100000).nullish(),
   totalVolumes: z.number().int().min(0).max(100000).nullish(),
   pageCount: z.number().int().min(0).max(200000).nullish(),
+  currentPage: z.number().int().min(0).max(200000).nullish(),
+  totalChapters: z.number().int().min(0).max(100000).nullish(),
+  currentChapter: z.number().int().min(0).max(100000).nullish(),
   publishedYear: z.number().int().min(0).max(3000).nullish(),
   olKey: z.string().max(200).nullish(),
   isbn: z.string().max(40).nullish(),
@@ -68,6 +71,9 @@ function parse(fd: FormData) {
     volume: num(fd, "volume"),
     totalVolumes: num(fd, "totalVolumes"),
     pageCount: num(fd, "pageCount"),
+    currentPage: num(fd, "currentPage"),
+    totalChapters: num(fd, "totalChapters"),
+    currentChapter: num(fd, "currentChapter"),
     publishedYear: num(fd, "publishedYear"),
     olKey: str(fd, "olKey"),
     isbn: str(fd, "isbn"),
@@ -157,4 +163,35 @@ export async function setBookRating(id: string, rating: number): Promise<BookAct
   await prisma.book.update({ where: { id }, data: { rating: r === 0 ? null : r } });
   revalidate();
   return { ok: true };
+}
+
+const progressSchema = z.object({
+  currentChapter: z.number().int().min(0).max(100000).nullish(),
+  totalChapters: z.number().int().min(0).max(100000).nullish(),
+  currentPage: z.number().int().min(0).max(200000).nullish(),
+});
+export type ProgressPatch = z.input<typeof progressSchema>;
+
+/** Mark how far along you are — bumping a chapter or page from a card. */
+export async function setBookProgress(id: string, patch: ProgressPatch): Promise<BookActionState> {
+  const userId = await getUserId();
+  if (!userId) return { ok: false, error: "You must be inside the library." };
+
+  const parsed = progressSchema.safeParse(patch);
+  if (!parsed.success) return { ok: false, error: "That number wandered off." };
+
+  const existing = await prisma.book.findUnique({ where: { id }, select: { userId: true, status: true, startedAt: true } });
+  if (!existing || existing.userId !== userId) return { ok: false, error: "That book isn't on your shelves." };
+
+  const data: Record<string, unknown> = { ...parsed.data };
+  // The first sign of progress quietly wakes a wished book into "reading".
+  const advancing = (parsed.data.currentChapter ?? 0) > 0 || (parsed.data.currentPage ?? 0) > 0;
+  if (existing.status === "want" && advancing) {
+    data.status = "reading";
+    if (!existing.startedAt) data.startedAt = new Date();
+  }
+
+  await prisma.book.update({ where: { id }, data });
+  revalidate();
+  return { ok: true, id };
 }

@@ -48,6 +48,8 @@ model Book {
   totalVolumes  Int?
   pageCount     Int?
   currentPage   Int?
+  totalChapters Int? // for manga & comics: how many chapters in all
+  currentChapter Int? // the chapter the reader is currently on
   isbn          String?
   olKey         String? // Open Library work/edition key
   publishedYear Int?
