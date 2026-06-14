@@ -268,6 +268,26 @@ export function Squirrel(p: CritterProps) {
   );
 }
 
+/* A cozy gnome with a droopy hat — keeper of the root hollow. */
+export function Gnome(p: CritterProps) {
+  return (
+    <svg {...svgProps(p)}>
+      {p.title && <title>{p.title}</title>}
+      <path d="M10 24c0-2.2 2.6-3.8 6-3.8s6 1.6 6 3.8v4.2H10V24z" fill="#5a4225" />
+      <path d="M16 8.5c-4.5 0-7.5 3.2-8.2 7.2-.4 2.2.8 3.8 2.4 4.1 1.2.2 2.4-.4 3-1.8.8 1.6 2.2 2.2 3.6 1.8 1.6-.5 2.8-2.2 2.4-4.6C26.2 11.2 21.8 8.5 16 8.5z" fill="#cf4327" />
+      <path d="M16 8.5c-2.2 0-4 1.2-5 3.1 1.4-.6 3-.5 4.2.4 1-.8 2.4-1 3.8-.6-.8-1.8-2.2-3-3-3z" fill="#e1583f" opacity="0.55" />
+      <circle cx="16" cy="17.5" r="4.2" fill="#e7c79a" />
+      <circle cx="17.6" cy="16.8" r="0.75" fill="#3a2616" />
+      <circle cx="14.2" cy="16.8" r="0.75" fill="#3a2616" />
+      <path d="M16 19.2c.9.7 2 .9 3 .3" stroke="#a9794a" strokeWidth="0.7" strokeLinecap="round" fill="none" />
+      <path d="M12.5 19.8c-.6 1.6-.4 3.2.4 4.4 1.2 1.8 3.2 2.8 3.1 2.8h-.2c-1.8 0-3.6-1-4.6-2.6-.8-1.2-1-2.8-.4-4.2z" fill="#f0e3c4" />
+      <path d="M19.5 19.8c.6 1.6.4 3.2-.4 4.4-1.2 1.8-3.2 2.8-3.1 2.8h.2c1.8 0 3.6-1 4.6-2.6.8-1.2 1-2.8.4-4.2z" fill="#f0e3c4" />
+      <path d="M14 24.5h4" stroke="#3f2c1a" strokeWidth="1.2" strokeLinecap="round" />
+      <circle cx="24.5" cy="22" r="1.2" fill="#ffe9a8" opacity="0.9" />
+    </svg>
+  );
+}
+
 /* A wee round spider, for dangling from a silk thread on the boughs. */
 export function Spider(p: CritterProps) {
   return (
@@ -323,7 +343,7 @@ export function StatusCritter({ status, ...rest }: { status: string } & CritterP
 }
 
 // Wee folk that wander the boughs, tucked into the gaps at the end of a shelf.
-const SHELF_CRITTERS: Critter[] = [Squirrel, Hedgehog, Frog, Snail, Squirrel, Fairy];
+const SHELF_CRITTERS: Critter[] = [Squirrel, Hedgehog, Frog, Snail, Fairy, Gnome];
 
 export function ShelfCritter({ index = 0, ...rest }: { index?: number } & CritterProps) {
   const C = SHELF_CRITTERS[((index % SHELF_CRITTERS.length) + SHELF_CRITTERS.length) % SHELF_CRITTERS.length];

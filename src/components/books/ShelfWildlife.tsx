@@ -1,26 +1,15 @@
 import type { CSSProperties } from "react";
-import { ShelfCritter, Spider } from "@/components/critters/Critters";
+import { Spider } from "@/components/critters/Critters";
+import SquirrelChase from "./SquirrelChase";
 
-// The wee folk that live on each bough: a critter scurrying back and forth
-// along the branch, and — on some shelves — a spider dangling from a thread.
+// Each bough: a squirrel chasing an acorn, and sometimes a spider on a thread.
 export default function ShelfWildlife({ index }: { index: number }) {
-  const dir = index % 2 === 0 ? "right" : "left";
-  const dur = 13 + (index % 4) * 3; // 13–22s to cross
-  const delay = (index % 3) * 2.4; // staggered starts so they don't march in step
   const showSpider = index % 2 === 1;
-  const spiderX = 58 + (index % 3) * 13; // 58–84%
+  const spiderX = 58 + (index % 3) * 13;
 
   return (
     <>
-      <span
-        className="critter-runner"
-        data-dir={dir}
-        style={{ ["--run-dur" as string]: `${dur}s`, ["--run-delay" as string]: `${delay}s` } as CSSProperties}
-      >
-        <span className="critter-gait">
-          <ShelfCritter index={index} size={30} />
-        </span>
-      </span>
+      <SquirrelChase index={index} />
 
       {showSpider && (
         <span className="spider-drop" style={{ ["--spider-x" as string]: `${spiderX}%` } as CSSProperties} aria-hidden>

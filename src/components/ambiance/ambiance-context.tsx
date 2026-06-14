@@ -28,7 +28,7 @@ type AmbianceState = {
 const Ctx = createContext<AmbianceState | null>(null);
 
 const KEY = "acorn-ambiance-v1";
-type Persisted = { atmosphereOn: boolean; musicOn: boolean; sfxOn: boolean; ambientOn: boolean; volume: number };
+type Persisted = { atmosphereOn: boolean; sfxOn: boolean; ambientOn: boolean; volume: number; trackIndex?: number };
 
 export function AmbianceProvider({ children }: { children: React.ReactNode }) {
   const engine = useMemo(() => getAudioEngine(), []);
@@ -62,6 +62,13 @@ export function AmbianceProvider({ children }: { children: React.ReactNode }) {
     setVolumeState(stored.volume ?? 0.38);
     engine.sfxOn = stored.sfxOn ?? true;
     engine.setMusicVolume(stored.volume ?? 0.38);
+    if (typeof stored.trackIndex === "number" && stored.trackIndex >= 0 && stored.trackIndex < TRACKS.length) {
+      engine.setTrackIndex(stored.trackIndex);
+      setTrackIndex(stored.trackIndex);
+    }
+    // Never resume music on load — only explicit play in the forest pod starts it.
+    engine.setMusicOn(false);
+    setMusicOn(false);
     setReady(true);
   }, [engine]);
 
@@ -75,9 +82,9 @@ export function AmbianceProvider({ children }: { children: React.ReactNode }) {
   // persist
   useEffect(() => {
     if (!ready) return;
-    const data: Persisted = { atmosphereOn, musicOn, sfxOn, ambientOn, volume };
+    const data: Persisted = { atmosphereOn, sfxOn, ambientOn, volume, trackIndex };
     try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {}
-  }, [atmosphereOn, musicOn, sfxOn, ambientOn, volume, ready]);
+  }, [atmosphereOn, sfxOn, ambientOn, volume, trackIndex, ready]);
 
   // unlock audio on first gesture
   useEffect(() => {

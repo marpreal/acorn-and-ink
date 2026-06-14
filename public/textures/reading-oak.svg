@@ -1,97 +1,79 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" fill="none" role="img" aria-hidden="true">
   <defs>
-    <radialGradient id="mist" cx="50%" cy="42%" r="68%">
-      <stop offset="0%" stop-color="#2a4030" stop-opacity="0.55"/>
-      <stop offset="55%" stop-color="#142018" stop-opacity="0.82"/>
-      <stop offset="100%" stop-color="#0a100c" stop-opacity="1"/>
+    <radialGradient id="canopyGlow" cx="50%" cy="36%" r="50%">
+      <stop offset="0%" stop-color="#c8e898" stop-opacity="0.55"/>
+      <stop offset="45%" stop-color="#7a9a58" stop-opacity="0.28"/>
+      <stop offset="100%" stop-color="#2c3f29" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="canopyGlow" cx="50%" cy="38%" r="42%">
-      <stop offset="0%" stop-color="#7a9a58" stop-opacity="0.45"/>
-      <stop offset="45%" stop-color="#3d5534" stop-opacity="0.22"/>
-      <stop offset="100%" stop-color="#1a2418" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="hollowGlow" cx="50%" cy="58%" r="18%">
-      <stop offset="0%" stop-color="#ffe9a8" stop-opacity="0.95"/>
-      <stop offset="55%" stop-color="#ffb24d" stop-opacity="0.55"/>
+    <radialGradient id="hollowGlow" cx="50%" cy="58%" r="22%">
+      <stop offset="0%" stop-color="#fff3cf"/>
+      <stop offset="45%" stop-color="#ffb24d" stop-opacity="0.85"/>
       <stop offset="100%" stop-color="#b3361f" stop-opacity="0"/>
     </radialGradient>
     <linearGradient id="trunk" x1="50%" y1="0%" x2="50%" y2="100%">
-      <stop offset="0%" stop-color="#6b4a2b"/>
-      <stop offset="35%" stop-color="#4a3018"/>
-      <stop offset="100%" stop-color="#221409"/>
+      <stop offset="0%" stop-color="#b98f5c"/>
+      <stop offset="40%" stop-color="#6b4a2b"/>
+      <stop offset="100%" stop-color="#2e1d0f"/>
     </linearGradient>
     <linearGradient id="canopy" x1="50%" y1="0%" x2="50%" y2="100%">
-      <stop offset="0%" stop-color="#8fae64"/>
-      <stop offset="40%" stop-color="#5b6b3f"/>
-      <stop offset="100%" stop-color="#2c3f29"/>
+      <stop offset="0%" stop-color="#b8d878"/>
+      <stop offset="45%" stop-color="#7d9a58"/>
+      <stop offset="100%" stop-color="#3c5234"/>
     </linearGradient>
-    <filter id="softBlur" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="18"/>
-    </filter>
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="6" result="b"/>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
 
-  <!-- distant forest -->
-  <rect width="1200" height="900" fill="url(#mist)"/>
-  <ellipse cx="180" cy="520" rx="140" ry="280" fill="#1a2a1e" opacity="0.55"/>
-  <ellipse cx="1020" cy="540" rx="160" ry="300" fill="#162018" opacity="0.6"/>
-  <ellipse cx="420" cy="610" rx="110" ry="220" fill="#142016" opacity="0.45"/>
-  <ellipse cx="780" cy="600" rx="120" ry="240" fill="#142016" opacity="0.45"/>
+  <!-- distant silhouettes (transparent edges — no solid backdrop) -->
+  <ellipse cx="160" cy="560" rx="120" ry="240" fill="#1d2e20" opacity="0.35"/>
+  <ellipse cx="1040" cy="570" rx="130" ry="250" fill="#162018" opacity="0.4"/>
+  <ellipse cx="400" cy="640" rx="90" ry="180" fill="#142016" opacity="0.28"/>
+  <ellipse cx="800" cy="630" rx="100" ry="200" fill="#142016" opacity="0.28"/>
 
-  <!-- canopy mass -->
-  <g filter="url(#softBlur)" opacity="0.85">
-    <ellipse cx="600" cy="290" rx="430" ry="260" fill="url(#canopy)"/>
-    <ellipse cx="380" cy="330" rx="220" ry="170" fill="#4a6238"/>
-    <ellipse cx="820" cy="320" rx="240" ry="180" fill="#425832"/>
-    <ellipse cx="600" cy="250" rx="300" ry="190" fill="#6d8450"/>
-  </g>
-  <ellipse cx="600" cy="300" rx="380" ry="210" fill="url(#canopyGlow)"/>
+  <!-- canopy -->
+  <ellipse cx="600" cy="280" rx="440" ry="270" fill="url(#canopy)" opacity="0.92"/>
+  <ellipse cx="370" cy="320" rx="230" ry="175" fill="#5b7340" opacity="0.88"/>
+  <ellipse cx="830" cy="310" rx="250" ry="185" fill="#526838" opacity="0.88"/>
+  <ellipse cx="600" cy="240" rx="310" ry="195" fill="#8fae64" opacity="0.75"/>
+  <ellipse cx="600" cy="295" rx="390" ry="215" fill="url(#canopyGlow)"/>
 
-  <!-- firefly specks (static, cozy  not rain) -->
-  <g fill="#f5c451" opacity="0.75" filter="url(#glow)">
-    <circle cx="420" cy="220" r="3"/><circle cx="510" cy="180" r="2.5"/><circle cx="680" cy="195" r="3"/>
-    <circle cx="760" cy="240" r="2"/><circle cx="340" cy="280" r="2.5"/><circle cx="880" cy="270" r="2"/>
-    <circle cx="560" cy="150" r="2"/><circle cx="640" cy="165" r="2.5"/><circle cx="720" cy="310" r="2"/>
-    <circle cx="480" cy="310" r="2"/><circle cx="820" cy="190" r="2.5"/><circle cx="390" cy="210" r="2"/>
+  <!-- firefly specks -->
+  <g fill="#f5c451" opacity="0.9" filter="url(#glow)">
+    <circle cx="420" cy="210" r="3.5"/><circle cx="510" cy="170" r="3"/><circle cx="680" cy="185" r="3.5"/>
+    <circle cx="760" cy="230" r="2.5"/><circle cx="340" cy="270" r="3"/><circle cx="880" cy="260" r="2.5"/>
+    <circle cx="560" cy="140" r="2.5"/><circle cx="640" cy="155" r="3"/><circle cx="720" cy="300" r="2.5"/>
+    <circle cx="480" cy="300" r="2.5"/><circle cx="820" cy="180" r="3"/><circle cx="390" cy="200" r="2.5"/>
   </g>
 
   <!-- trunk -->
-  <path d="M600 860 C520 860 470 780 455 680 C440 580 460 500 490 420 C510 360 520 310 535 270 C545 245 560 230 600 230 C640 230 655 245 665 270 C680 310 690 360 710 420 C740 500 760 580 745 680 C730 780 680 860 600 860Z" fill="url(#trunk)"/>
-  <path d="M600 860 C565 860 540 820 530 760 C525 720 530 680 545 640 C555 610 565 590 600 590 C635 590 645 610 655 640 C670 680 675 720 670 760 C660 820 635 860 600 860Z" fill="#2e1d0f" opacity="0.35"/>
-
-  <!-- bark texture -->
-  <path d="M560 420 Q545 520 535 640" stroke="#221409" stroke-width="4" opacity="0.25" stroke-linecap="round"/>
-  <path d="M640 400 Q655 520 665 650" stroke="#221409" stroke-width="5" opacity="0.22" stroke-linecap="round"/>
-  <path d="M600 350 Q590 480 585 620" stroke="#3f2c1a" stroke-width="3" opacity="0.2" stroke-linecap="round"/>
+  <path d="M600 870 C510 870 455 785 440 680 C425 575 448 495 478 415 C498 355 512 300 528 255 C540 228 560 215 600 215 C640 215 660 228 672 255 C688 300 702 355 722 415 C752 495 775 575 760 680 C745 785 690 870 600 870Z" fill="url(#trunk)"/>
+  <path d="M575 420 Q560 540 550 660" stroke="#221409" stroke-width="5" opacity="0.2" stroke-linecap="round"/>
+  <path d="M625 400 Q640 540 650 670" stroke="#221409" stroke-width="6" opacity="0.18" stroke-linecap="round"/>
 
   <!-- hollow doorway -->
-  <path d="M600 560 C565 560 545 590 545 630 C545 680 565 710 600 710 C635 710 655 680 655 630 C655 590 635 560 600 560Z" fill="#120a06"/>
-  <ellipse cx="600" cy="630" rx="42" ry="52" fill="url(#hollowGlow)" opacity="0.9"/>
+  <path d="M600 565 C560 565 535 598 535 642 C535 692 560 725 600 725 C640 725 665 692 665 642 C665 598 640 565 600 565Z" fill="#120a06"/>
+  <ellipse cx="600" cy="640" rx="48" ry="58" fill="url(#hollowGlow)" opacity="0.95"/>
 
   <!-- roots -->
-  <path d="M455 680 C400 720 340 760 280 790 C320 770 380 740 430 710 C460 695 480 690 455 680Z" fill="#2e1d0f" opacity="0.85"/>
-  <path d="M745 680 C800 720 860 760 920 790 C880 770 820 740 770 710 C740 695 720 690 745 680Z" fill="#2e1d0f" opacity="0.85"/>
-  <path d="M520 760 C500 820 490 860 480 890 C510 860 530 820 540 780 C545 760 535 750 520 760Z" fill="#221409" opacity="0.7"/>
-  <path d="M680 760 C700 820 710 860 720 890 C690 860 670 820 660 780 C655 760 665 750 680 760Z" fill="#221409" opacity="0.7"/>
+  <path d="M440 680 C375 725 310 770 250 805 C295 780 360 745 415 715 C445 698 465 692 440 680Z" fill="#3f2c1a" opacity="0.9"/>
+  <path d="M760 680 C825 725 890 770 950 805 C905 780 840 745 785 715 C755 698 735 692 760 680Z" fill="#3f2c1a" opacity="0.9"/>
+  <path d="M515 770 C492 835 482 875 472 900 C505 872 528 830 538 788 C544 766 532 755 515 770Z" fill="#2e1d0f" opacity="0.85"/>
+  <path d="M685 770 C708 835 718 875 728 900 C695 872 672 830 662 788 C656 766 668 755 685 770Z" fill="#2e1d0f" opacity="0.85"/>
 
-  <!-- moss on roots -->
-  <ellipse cx="360" cy="770" rx="48" ry="16" fill="#3c5234" opacity="0.55"/>
-  <ellipse cx="840" cy="775" rx="52" ry="18" fill="#3c5234" opacity="0.5"/>
-  <ellipse cx="600" cy="845" rx="90" ry="22" fill="#2c3f29" opacity="0.45"/>
+  <!-- moss -->
+  <ellipse cx="350" cy="785" rx="52" ry="18" fill="#5b6b3f" opacity="0.65"/>
+  <ellipse cx="850" cy="790" rx="56" ry="20" fill="#5b6b3f" opacity="0.6"/>
+  <ellipse cx="600" cy="855" rx="95" ry="24" fill="#3c5234" opacity="0.55"/>
 
-  <!-- toadstools at base -->
-  <g opacity="0.9">
-    <ellipse cx="330" cy="800" rx="14" ry="6" fill="#efe1c2" opacity="0.5"/>
-    <path d="M330 800 C318 785 322 770 330 768 C338 770 342 785 330 800Z" fill="#b3361f"/>
-    <circle cx="326" cy="778" r="2" fill="#fbf3df"/><circle cx="334" cy="774" r="1.5" fill="#fbf3df"/>
-    <ellipse cx="870" cy="805" rx="12" ry="5" fill="#efe1c2" opacity="0.45"/>
-    <path d="M870 805 C860 792 863 780 870 778 C877 780 880 792 870 805Z" fill="#cf4327"/>
-    <circle cx="867" cy="782" r="1.5" fill="#fbf3df"/>
+  <!-- toadstools -->
+  <g opacity="0.95">
+    <ellipse cx="320" cy="815" rx="15" ry="6" fill="#efe1c2" opacity="0.65"/>
+    <path d="M320 815 C307 798 311 782 320 780 C329 782 333 798 320 815Z" fill="#cf4327"/>
+    <circle cx="316" cy="790" r="2.2" fill="#fbf3df"/><circle cx="324" cy="786" r="1.8" fill="#fbf3df"/>
+    <ellipse cx="880" cy="820" rx="13" ry="5" fill="#efe1c2" opacity="0.6"/>
+    <path d="M880 820 C870 806 873 794 880 792 C887 794 890 806 880 820Z" fill="#b3361f"/>
+    <circle cx="877" cy="796" r="1.8" fill="#fbf3df"/>
   </g>
-
-  <!-- ground mist -->
-  <ellipse cx="600" cy="880" rx="520" ry="60" fill="#1a2418" opacity="0.55"/>
 </svg>

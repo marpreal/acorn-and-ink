@@ -9,8 +9,9 @@ import type { BookDTO } from "@/lib/book-dto";
 import BookSpine from "./BookSpine";
 import BookTome from "./BookTome";
 import BookForm from "./BookForm";
+import BranchBough from "./BranchBough";
 import Fireflies from "./Fireflies";
-import ShelfWildlife from "./ShelfWildlife";
+import TreeFloor from "./TreeFloor";
 import { FormatCritter, StatusCritter, Sprout } from "@/components/critters/Critters";
 import { useSfx } from "@/components/ambiance/ambiance-context";
 
@@ -204,7 +205,7 @@ export default function ShelvesView({ books: initialBooks }: { books: BookDTO[] 
           <Fireflies />
           <div className="tree-shelves">
             {shelves.map((shelf, gi) => (
-              <section key={shelf.id} className="branch-shelf">
+              <section key={shelf.id} className={`branch-shelf${gi % 2 === 1 ? " branch-shelf--from-right" : ""}`}>
                 <div className="shelf-sign">
                   {shelf.kind === "genre" && <FormatCritter format={shelf.metaKey} size={22} />}
                   {shelf.kind === "status" && <StatusCritter status={shelf.metaKey} size={20} />}
@@ -215,18 +216,17 @@ export default function ShelvesView({ books: initialBooks }: { books: BookDTO[] 
                     <span className="shelf-sign-blurb font-hand text-base hidden sm:inline">· {shelf.blurb}</span>
                   )}
                 </div>
-                <div className="shelf-books">
+                <BranchBough index={gi}>
                   <AnimatePresence mode="popLayout">
                     {shelf.items.map((b) => (
                       <BookSpine key={b.id} book={b} onOpen={onOpenBook} />
                     ))}
                   </AnimatePresence>
-                </div>
-                <div className="shelf-plank" />
-                <ShelfWildlife index={gi} />
+                </BranchBough>
               </section>
             ))}
           </div>
+          <TreeFloor />
         </div>
       )}
 

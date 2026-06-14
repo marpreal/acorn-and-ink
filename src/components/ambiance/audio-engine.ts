@@ -315,12 +315,18 @@ export class AudioEngine {
       onload: () => {
         if (autoplay && this.musicOn) void this.howl?.play();
       },
-      onloaderror: (_id, err) => console.warn("Track load failed:", track.file, err),
-      onplayerror: () => {
+      onloaderror: (_id, err) => {
+        console.warn("Track load failed:", track.file, err);
         this.musicOn = false;
         this.onChange?.();
       },
-      onend: () => this.next(),
+      onplayerror: () => {
+        this.unlock();
+        this.howl?.once("unlock", () => {
+          if (this.musicOn) void this.howl?.play();
+        });
+      },
+      onend: () => { if (this.musicOn) this.next(); },
       onplay: () => this.onChange?.(),
       onpause: () => this.onChange?.(),
     });
@@ -335,22 +341,42 @@ export class AudioEngine {
   duration(): number { const d = this.howl?.duration(); return typeof d === "number" ? d : 0; }
   seekTo(sec: number) { this.howl?.seek(sec); }
 
+  setTrackIndex(index: number) {
+    const n = TRACKS.length || 1;
+    this.trackIndex = ((index % n) + n) % n;
+    this.unloadCurrent();
+    this.onChange?.();
+  }
+
   setMusicOn(on: boolean) {
     this.musicOn = on;
     if (on) {
+      this.unlock();
       if (!this.howl) this.loadTrack(this.trackIndex, true);
-      else this.howl.play();
+      else void this.howl.play();
     } else {
       this.howl?.pause();
     }
     this.onChange?.();
   }
 
-  next() { this.loadTrack(this.trackIndex + 1, this.musicOn); }
-  prev() { this.loadTrack(this.trackIndex - 1, this.musicOn); }
+  next() {
+    const n = TRACKS.length || 1;
+    const nextIndex = (this.trackIndex + 1) % n;
+    if (this.musicOn) this.loadTrack(nextIndex, true);
+    else this.setTrackIndex(nextIndex);
+  }
+
+  prev() {
+    const n = TRACKS.length || 1;
+    const prevIndex = (this.trackIndex - 1 + n) % n;
+    if (this.musicOn) this.loadTrack(prevIndex, true);
+    else this.setTrackIndex(prevIndex);
+  }
 
   playIndex(index: number) {
     this.musicOn = true;
+    this.unlock();
     this.loadTrack(index, true);
     this.onChange?.();
   }
