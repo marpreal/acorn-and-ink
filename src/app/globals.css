@@ -104,6 +104,68 @@ body::after {
   mix-blend-mode: soft-light;
 }
 
+/* ── Glade rain: full-page background storm (cloud toggle) ── */
+.glade-rain {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+.glade-rain-mist {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(12, 18, 24, 0.35) 0%, rgba(8, 14, 18, 0.12) 40%, rgba(6, 10, 8, 0.28) 100%),
+    radial-gradient(120% 80% at 50% 0%, rgba(100, 130, 160, 0.18), transparent 55%);
+}
+.glade-rain-curtain {
+  position: absolute;
+  inset: -30% -10%;
+  opacity: 0.55;
+}
+.glade-rain-curtain::before,
+.glade-rain-curtain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat;
+  will-change: transform;
+}
+.glade-rain-curtain::before {
+  background-image: repeating-linear-gradient(
+    102deg,
+    transparent 0 14px,
+    rgba(190, 215, 240, 0.16) 14px 15px,
+    transparent 15px 34px
+  );
+  animation: rain 0.55s linear infinite;
+}
+.glade-rain-curtain::after {
+  background-image: repeating-linear-gradient(
+    102deg,
+    transparent 0 24px,
+    rgba(170, 200, 230, 0.1) 24px 25px,
+    transparent 25px 52px
+  );
+  animation: rain 0.85s linear infinite;
+  opacity: 0.75;
+}
+.glade-rain-curtain--still::before,
+.glade-rain-curtain--still::after {
+  animation: none;
+  opacity: 0.35;
+}
+
+html[data-ambient="on"] body {
+  background-color: #080c10;
+  background-image:
+    radial-gradient(120% 90% at 50% -10%, rgba(40, 58, 72, 0.5), transparent 60%),
+    radial-gradient(80% 60% at 80% 110%, rgba(50, 60, 70, 0.35), transparent 60%),
+    radial-gradient(90% 70% at 10% 100%, rgba(16, 28, 32, 0.65), transparent 55%),
+    linear-gradient(180deg, #0a1014 0%, #080c0a 45%, #0a0908 100%);
+}
+
 /* Hide native cursor where we paint our own candle (fine pointers only) */
 @media (hover: hover) and (pointer: fine) {
   html[data-atmosphere="on"],
@@ -333,6 +395,341 @@ a {
     box-shadow: 0 0 14px -4px rgba(255, 178, 77, 0.7);
   }
 
+  /* ── The Reading Tree: a glowing ancient oak, with shelves on its boughs ── */
+  .reading-tree {
+    position: relative;
+    border-radius: 26px;
+    overflow: hidden;
+    min-height: clamp(460px, 86vh, 940px);
+    box-shadow: 0 40px 90px -50px rgba(0, 0, 0, 0.95);
+  }
+  /* the painting itself, blended softly into the page so it wears no hard frame */
+  .tree-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url("/textures/reading-oak.svg");
+    background-size: cover;
+    background-position: center 18%;
+    background-repeat: no-repeat;
+    filter: saturate(1.12) contrast(1.02) brightness(0.94);
+    -webkit-mask-image: radial-gradient(118% 100% at 50% 38%, #000 48%, rgba(0, 0, 0, 0.4) 78%, transparent 100%);
+    mask-image: radial-gradient(118% 100% at 50% 38%, #000 48%, rgba(0, 0, 0, 0.4) 78%, transparent 100%);
+  }
+  /* a vignette to sink the edges into the wood */
+  .tree-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(130% 95% at 50% 34%, transparent 40%, rgba(6, 9, 7, 0.62) 100%),
+      linear-gradient(180deg, rgba(8, 12, 9, 0.4) 0%, transparent 24%, transparent 68%, rgba(6, 9, 7, 0.7) 100%);
+  }
+  /* fireflies drifting through the branches */
+  .tree-fireflies {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .firefly {
+    position: absolute;
+    width: var(--ff-s, 4px);
+    height: var(--ff-s, 4px);
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff3cf 0%, #f5c451 55%, transparent 75%);
+    box-shadow: 0 0 8px 2px rgba(245, 196, 81, 0.75);
+    opacity: 0;
+    animation: firefly var(--ff-dur, 7s) ease-in-out infinite;
+    animation-delay: var(--ff-delay, 0s);
+  }
+
+  /* the shelves, floating over the tree like lit boughs */
+  .tree-shelves {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.3rem, 3.5vw, 2.6rem);
+    padding: clamp(1rem, 3vw, 2rem) clamp(0.8rem, 3vw, 2rem) clamp(1.6rem, 4vw, 2.8rem);
+  }
+  .branch-shelf { position: relative; }
+  /* a carved wooden sign naming the shelf */
+  .shelf-sign {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    margin-bottom: 0.55rem;
+    padding: 0.4rem 0.95rem;
+    border-radius: 11px;
+    background: linear-gradient(180deg, rgba(58, 40, 26, 0.94), rgba(34, 20, 9, 0.94));
+    border: 1px solid rgba(245, 196, 81, 0.3);
+    box-shadow:
+      0 1px 0 rgba(255, 210, 140, 0.18) inset,
+      0 8px 20px -8px rgba(0, 0, 0, 0.85);
+    color: var(--color-glow);
+    backdrop-filter: blur(2px);
+  }
+  .shelf-sign-count {
+    font-size: 0.8rem;
+    color: var(--color-moss-200);
+    opacity: 0.85;
+  }
+  .shelf-sign-blurb {
+    color: var(--color-moss-300);
+    opacity: 0.9;
+  }
+  .shelf-books {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 190px;
+    padding: 0 12px;
+  }
+  /* the bough on which the books rest — a knobbly, mossy branch */
+  .shelf-plank {
+    position: relative;
+    height: 22px;
+    border-radius: 45% 30% 50% 60% / 60% 70% 50% 45%;
+    background:
+      linear-gradient(180deg, rgba(91, 107, 63, 0.5) 0%, transparent 24%),
+      repeating-linear-gradient(87deg, rgba(0, 0, 0, 0.16) 0 2px, transparent 2px 14px),
+      linear-gradient(180deg, #8a5a2a 0%, #5e3f1f 46%, #2a1a0d 100%);
+    box-shadow:
+      0 1px 0 rgba(255, 210, 140, 0.2) inset,
+      0 14px 24px -10px rgba(0, 0, 0, 0.88);
+  }
+  /* a gnarled knot in the bark */
+  .shelf-plank::before {
+    content: "";
+    position: absolute;
+    left: 20%;
+    top: 5px;
+    width: 15px;
+    height: 11px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 38% 38%, #6e4a28, #241408 72%);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.18);
+  }
+  /* a sprig of leaves at the bough's tip */
+  .shelf-plank::after {
+    content: "";
+    position: absolute;
+    right: -10px;
+    top: -13px;
+    width: 30px;
+    height: 24px;
+    background:
+      radial-gradient(54% 70% at 28% 70%, #5b6b3f, transparent 72%),
+      radial-gradient(50% 66% at 64% 36%, #7d8d4f, transparent 72%),
+      radial-gradient(44% 60% at 90% 70%, #4d6743, transparent 72%);
+    opacity: 0.92;
+  }
+
+  /* a critter scurrying back and forth along the bough */
+  .critter-runner {
+    position: absolute;
+    bottom: 14px;
+    left: 8%;
+    z-index: 4;
+    filter: drop-shadow(0 5px 6px rgba(0, 0, 0, 0.55));
+    animation: run-track var(--run-dur, 16s) linear infinite var(--run-delay, 0s);
+  }
+  .critter-runner[data-dir="left"] {
+    transform: scaleX(-1);
+    animation-direction: reverse;
+  }
+  .critter-gait {
+    display: inline-block;
+    animation: gait 0.42s ease-in-out infinite;
+  }
+  /* a spider lowered on a thread of silk */
+  .spider-drop {
+    position: absolute;
+    top: 6px;
+    left: var(--spider-x, 70%);
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .spider-thread {
+    width: 1px;
+    height: 42px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.12));
+  }
+  .spider-bob {
+    display: inline-block;
+    margin-top: -2px;
+    filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.5));
+    animation: dangle 4.5s ease-in-out infinite;
+  }
+
+  /* a book standing on the shelf, seen spine-out */
+  .book-spine {
+    position: relative;
+    width: var(--spine-w, 46px);
+    height: var(--spine-h, 158px);
+    border-radius: 2px 5px 5px 2px / 4px 4px 4px 4px;
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent 14%, transparent 76%, rgba(0, 0, 0, 0.5)),
+      repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.07) 0 7px, rgba(255, 255, 255, 0.05) 7px 8px),
+      linear-gradient(180deg, var(--spine-a, #6b4a2b), rgba(0, 0, 0, 0.4)),
+      var(--spine-a, #6b4a2b);
+    box-shadow:
+      0 12px 16px -12px rgba(0, 0, 0, 0.9),
+      -1px 0 0 rgba(0, 0, 0, 0.3) inset,
+      1px 0 0 rgba(255, 255, 255, 0.08) inset;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 0 20px;
+    will-change: transform;
+  }
+  /* gilt head & tail bands */
+  .book-spine::before,
+  .book-spine::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: repeating-linear-gradient(90deg, rgba(245, 196, 81, 0.95) 0 2px, rgba(120, 86, 46, 0.7) 2px 4px);
+    opacity: 0.7;
+  }
+  .book-spine::before { top: 4px; }
+  .book-spine::after { bottom: 4px; }
+  /* a gilt-edged label where the title is stamped */
+  .book-spine .spine-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 66%;
+    padding: 9px 2px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.22), rgba(255, 255, 255, 0.07) 45%, rgba(0, 0, 0, 0.22));
+    box-shadow:
+      inset 0 0 0 1px rgba(245, 196, 81, 0.4),
+      0 1px 2px rgba(0, 0, 0, 0.45);
+  }
+  .book-spine .spine-title {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    rotate: 180deg;
+    white-space: nowrap;
+    overflow: hidden;
+    max-height: 100%;
+    font-family: var(--font-serif);
+    font-size: 0.98rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--spine-ink, #fbf3df);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ── The opened tome: a book that swings open into a two-page spread ── */
+  .tome-stage { perspective: 2600px; }
+  .tome {
+    position: relative;
+    display: flex;
+    transform-style: preserve-3d;
+  }
+  .tome-page {
+    width: min(42vw, 340px);
+    min-height: min(62vh, 470px);
+    padding: clamp(0.9rem, 2.2vw, 1.6rem);
+    background:
+      radial-gradient(130% 130% at 0% 0%, rgba(255, 252, 240, 0.7), transparent 55%),
+      linear-gradient(170deg, var(--color-vellum), var(--color-parchment) 60%, var(--color-parchment-soft));
+    color: #3a2c1a;
+    overflow-y: auto;
+  }
+  .tome-page.left {
+    border-radius: 10px 3px 3px 10px;
+    box-shadow: inset -22px 0 34px -22px rgba(80, 54, 24, 0.7);
+  }
+  .tome-page.right {
+    border-radius: 3px 10px 10px 3px;
+    box-shadow: inset 22px 0 34px -22px rgba(80, 54, 24, 0.7);
+  }
+  /* the hard front cover — an old, gilt-stamped leather board */
+  .tome-cover {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    border-radius: 3px 14px 14px 3px;
+    background:
+      radial-gradient(120% 90% at 78% 12%, rgba(255, 255, 255, 0.1), transparent 55%),
+      repeating-linear-gradient(125deg, rgba(0, 0, 0, 0.05) 0 3px, transparent 3px 7px),
+      linear-gradient(135deg, #3f5736, #2c3f29 55%, #1c2c1e);
+    border: 1px solid rgba(0, 0, 0, 0.45);
+    box-shadow:
+      0 0 0 1px rgba(245, 196, 81, 0.2) inset,
+      0 24px 50px -18px rgba(0, 0, 0, 0.9);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    backface-visibility: hidden;
+  }
+  /* a double gilt rule framing the cover */
+  .tome-cover::before {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 1.5px solid rgba(245, 196, 81, 0.5);
+    border-radius: 6px;
+    box-shadow: 0 0 0 3px rgba(245, 196, 81, 0.14);
+    pointer-events: none;
+    z-index: 2;
+  }
+  /* a gilt flourish stamped at the foot of the cover */
+  .tome-cover::after {
+    content: "❧";
+    position: absolute;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    color: rgba(245, 196, 81, 0.78);
+    font-size: 1.3rem;
+    line-height: 1;
+    z-index: 2;
+    text-shadow: 0 0 8px rgba(245, 196, 81, 0.5);
+  }
+  /* a silk bookmark ribbon draped down the gutter */
+  .tome-ribbon {
+    position: absolute;
+    top: -4px;
+    left: calc(50% - 6px);
+    width: 12px;
+    height: calc(100% + 46px);
+    background:
+      linear-gradient(90deg, rgba(255, 255, 255, 0.25), transparent 42%),
+      linear-gradient(180deg, #cf4327, #8a2330);
+    box-shadow: 0 10px 16px -8px rgba(0, 0, 0, 0.7);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 84%, 0 100%);
+  }
+  .tome-leaf {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    transform-origin: left center;
+    border-radius: 3px 10px 10px 3px;
+    background: linear-gradient(170deg, var(--color-vellum), var(--color-parchment-soft));
+    box-shadow: -12px 0 22px -16px rgba(80, 54, 24, 0.8);
+    backface-visibility: hidden;
+  }
+
   .lantern-link {
     position: relative;
     display: inline-flex;
@@ -373,6 +770,35 @@ a {
 @keyframes growIn {
   from { opacity: 0; transform: translateY(14px) scale(0.98); }
   to { opacity: 1; transform: translateY(0) scale(1); }
+}
+/* a firefly bobbing and pulsing among the branches */
+@keyframes firefly {
+  0%, 100% { transform: translate(0, 0); opacity: 0; }
+  15% { opacity: 0.95; }
+  50% { transform: translate(var(--ff-dx, 10px), -16px); opacity: 0.5; }
+  85% { opacity: 0.9; }
+}
+/* a critter travelling the length of a bough */
+@keyframes run-track {
+  0% { left: -6%; }
+  100% { left: 104%; }
+}
+/* the bob & tilt of little legs running */
+@keyframes gait {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  25% { transform: translateY(-4px) rotate(2deg); }
+  50% { transform: translateY(0) rotate(3deg); }
+  75% { transform: translateY(-4px) rotate(-2deg); }
+}
+/* a spider swinging gently on its thread */
+@keyframes dangle {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(9px) rotate(4deg); }
+}
+/* rain sliding down the glade */
+@keyframes rain {
+  from { transform: translateY(-22%); }
+  to { transform: translateY(22%); }
 }
 /* Critters & leaves tumbling down through the canopy */
 @keyframes drift {

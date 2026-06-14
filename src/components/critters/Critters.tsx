@@ -236,6 +236,60 @@ export function MushroomDot(p: CritterProps) {
   );
 }
 
+/* A bright-eyed squirrel, bushy tail curled, hugging an acorn. */
+export function Squirrel(p: CritterProps) {
+  return (
+    <svg {...svgProps(p)}>
+      {p.title && <title>{p.title}</title>}
+      {/* bushy tail curling up behind */}
+      <path d="M13 28C4.5 28 1.8 20.5 4.2 14.5 5.8 10.4 10 9 12.4 10.8c2 1.5 1.2 3.9-1 3.9-3 0-4.8 3.2-3.8 5.9.8 2.1 3 3.1 5.7 3.1z" fill="#b9762e" />
+      <path d="M11.8 11.2C8.3 11.6 5.3 14 4.2 17.8c-.7 2.4-.4 4.6.6 6.3C4 19.2 6.4 14 11.8 12.6z" fill="#d6a05c" opacity="0.6" />
+      {/* hind foot */}
+      <ellipse cx="14.5" cy="26.8" rx="3" ry="1.5" fill="#8a4f1a" />
+      {/* body */}
+      <path d="M12.5 25c-1.3-6.2 1.9-11.4 7.1-11.4 3.8 0 6.4 2.9 6.4 6.8 0 4.3-3.1 7.6-7.6 7.6-3 0-5.2-1-5.9-3z" fill="#a9651f" />
+      {/* cream belly */}
+      <path d="M14.6 24c-.7-3.2.5-6.3 2.8-7.9 1.7 1.9 2.5 4.4 2.2 7.2-1.4 1.4-3.6 1.6-5 .7z" fill="#f0dcbf" />
+      {/* head */}
+      <circle cx="22.6" cy="11.8" r="5.3" fill="#a9651f" />
+      {/* ear */}
+      <path d="M20 7.6c-.5-1.7 0-3.1 1.1-3.4 1.1-.3 2.1.8 2.2 2.5z" fill="#8a4f1a" />
+      {/* eye + shine */}
+      <circle cx="24.2" cy="11.2" r="1.15" fill="#2a1a0e" />
+      <circle cx="24.6" cy="10.8" r="0.35" fill="#fff" opacity="0.85" />
+      {/* nose */}
+      <circle cx="27.4" cy="12.4" r="0.9" fill="#3a2616" />
+      {/* acorn hugged at the chest */}
+      <ellipse cx="18.4" cy="20.6" rx="2" ry="2.4" fill="#c9a36a" />
+      <path d="M16.1 19.4c0-1 1-1.7 2.3-1.7s2.3.7 2.3 1.7z" fill="#5e4023" />
+      {/* little paws */}
+      <path d="M20 23.2c-1 .5-2.1.4-3-.2M20.6 18.4c-.9-.6-2-.7-3-.2" stroke="#8a4f1a" strokeWidth="0.9" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
+
+/* A wee round spider, for dangling from a silk thread on the boughs. */
+export function Spider(p: CritterProps) {
+  return (
+    <svg {...svgProps(p)}>
+      {p.title && <title>{p.title}</title>}
+      {/* legs */}
+      <g stroke="#1c130b" strokeWidth="1.4" strokeLinecap="round" fill="none">
+        <path d="M13 15c-3-1.5-5-1-7-3M13 17c-3 0-5.5 1-7.5 1M13 19c-2.6 1.2-4 2.6-6 3.4" />
+        <path d="M19 15c3-1.5 5-1 7-3M19 17c3 0 5.5 1 7.5 1M19 19c2.6 1.2 4 2.6 6 3.4" />
+      </g>
+      {/* round abdomen + head */}
+      <ellipse cx="16" cy="18.5" rx="5.2" ry="5.8" fill="#241812" />
+      <ellipse cx="16" cy="18.5" rx="5.2" ry="5.8" fill="#3a2616" opacity="0.5" />
+      <circle cx="16" cy="12.5" r="3" fill="#2a1c12" />
+      {/* a friendly pair of eyes + a back marking */}
+      <circle cx="14.8" cy="12" r="0.7" fill="#f6e3bf" />
+      <circle cx="17.2" cy="12" r="0.7" fill="#f6e3bf" />
+      <path d="M16 15.5v6M14 17.5l4 2M18 17.5l-4 2" stroke="#6e4a28" strokeWidth="0.8" opacity="0.6" />
+    </svg>
+  );
+}
+
 // ─────────────────────────── Maps ───────────────────────────
 // Format & status keys → their critter. Kept here (not in lib/formats.ts) so the
 // data layer stays free of React. Components fall back gracefully to the emoji
@@ -265,5 +319,13 @@ export function FormatCritter({ format, ...rest }: { format: string } & CritterP
 
 export function StatusCritter({ status, ...rest }: { status: string } & CritterProps) {
   const C = STATUS_CRITTERS[status] ?? Leaf;
+  return <C {...rest} />;
+}
+
+// Wee folk that wander the boughs, tucked into the gaps at the end of a shelf.
+const SHELF_CRITTERS: Critter[] = [Squirrel, Hedgehog, Frog, Snail, Squirrel, Fairy];
+
+export function ShelfCritter({ index = 0, ...rest }: { index?: number } & CritterProps) {
+  const C = SHELF_CRITTERS[((index % SHELF_CRITTERS.length) + SHELF_CRITTERS.length) % SHELF_CRITTERS.length];
   return <C {...rest} />;
 }

@@ -8,6 +8,7 @@ type AmbianceState = {
   atmosphereOn: boolean;
   musicOn: boolean;
   sfxOn: boolean;
+  ambientOn: boolean;
   volume: number;
   trackIndex: number;
   reducedMotion: boolean;
@@ -16,6 +17,7 @@ type AmbianceState = {
   toggleAtmosphere: () => void;
   toggleMusic: () => void;
   toggleSfx: () => void;
+  toggleAmbient: () => void;
   nextTrack: () => void;
   prevTrack: () => void;
   playIndex: (i: number) => void;
@@ -26,7 +28,7 @@ type AmbianceState = {
 const Ctx = createContext<AmbianceState | null>(null);
 
 const KEY = "acorn-ambiance-v1";
-type Persisted = { atmosphereOn: boolean; musicOn: boolean; sfxOn: boolean; volume: number };
+type Persisted = { atmosphereOn: boolean; musicOn: boolean; sfxOn: boolean; ambientOn: boolean; volume: number };
 
 export function AmbianceProvider({ children }: { children: React.ReactNode }) {
   const engine = useMemo(() => getAudioEngine(), []);
@@ -34,11 +36,13 @@ export function AmbianceProvider({ children }: { children: React.ReactNode }) {
   const [atmosphereOn, setAtmosphereOn] = useState(true);
   const [musicOn, setMusicOn] = useState(false);
   const [sfxOn, setSfxOn] = useState(true);
+  const [ambientOn, setAmbientOn] = useState(false);
   const [volume, setVolumeState] = useState(0.38);
   const [trackIndex, setTrackIndex] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
   const unlocked = useRef(false);
+  const ambientWanted = useRef(false); // start the bed once audio is unlocked
 
   // hydrate prefs + environment
   useEffect(() => {
@@ -53,24 +57,27 @@ export function AmbianceProvider({ children }: { children: React.ReactNode }) {
     const atmo = stored.atmosphereOn ?? !rm;
     setAtmosphereOn(atmo);
     setSfxOn(stored.sfxOn ?? true);
+    setAmbientOn(stored.ambientOn ?? false);
+    ambientWanted.current = stored.ambientOn ?? false;
     setVolumeState(stored.volume ?? 0.38);
     engine.sfxOn = stored.sfxOn ?? true;
     engine.setMusicVolume(stored.volume ?? 0.38);
     setReady(true);
   }, [engine]);
 
-  // reflect atmosphere flag onto <html> for the cursor CSS
+  // reflect atmosphere / rain flags onto <html> for global CSS
   useEffect(() => {
     if (!ready) return;
     document.documentElement.dataset.atmosphere = atmosphereOn ? "on" : "off";
-  }, [atmosphereOn, ready]);
+    document.documentElement.dataset.ambient = ambientOn ? "on" : "off";
+  }, [atmosphereOn, ambientOn, ready]);
 
   // persist
   useEffect(() => {
     if (!ready) return;
-    const data: Persisted = { atmosphereOn, musicOn, sfxOn, volume };
+    const data: Persisted = { atmosphereOn, musicOn, sfxOn, ambientOn, volume };
     try { localStorage.setItem(KEY, JSON.stringify(data)); } catch {}
-  }, [atmosphereOn, musicOn, sfxOn, volume, ready]);
+  }, [atmosphereOn, musicOn, sfxOn, ambientOn, volume, ready]);
 
   // unlock audio on first gesture
   useEffect(() => {
@@ -78,6 +85,7 @@ export function AmbianceProvider({ children }: { children: React.ReactNode }) {
       if (unlocked.current) return;
       unlocked.current = true;
       engine.unlock();
+      if (ambientWanted.current) engine.setAmbientOn(true);
     };
     window.addEventListener("pointerdown", onGesture, { once: true });
     window.addEventListener("keydown", onGesture, { once: true });
@@ -102,6 +110,9 @@ export function AmbianceProvider({ children }: { children: React.ReactNode }) {
   const toggleMusic = useCallback(() => {
     setMusicOn((v) => { engine.setMusicOn(!v); return !v; });
   }, [engine]);
+  const toggleAmbient = useCallback(() => {
+    setAmbientOn((v) => { const next = !v; ambientWanted.current = next; engine.setAmbientOn(next); return next; });
+  }, [engine]);
   const nextTrack = useCallback(() => { engine.next(); setTrackIndex(engine.currentIndex); }, [engine]);
   const prevTrack = useCallback(() => { engine.prev(); setTrackIndex(engine.currentIndex); }, [engine]);
   const playIndex = useCallback((i: number) => {
@@ -110,9 +121,9 @@ export function AmbianceProvider({ children }: { children: React.ReactNode }) {
   const setVolume = useCallback((v: number) => { engine.setMusicVolume(v); setVolumeState(v); }, [engine]);
 
   const value: AmbianceState = {
-    ready, atmosphereOn, musicOn, sfxOn, volume, trackIndex, reducedMotion, isTouch,
+    ready, atmosphereOn, musicOn, sfxOn, ambientOn, volume, trackIndex, reducedMotion, isTouch,
     tracks: TRACKS,
-    toggleAtmosphere, toggleMusic, toggleSfx, nextTrack, prevTrack, playIndex, setVolume, playSfx,
+    toggleAtmosphere, toggleMusic, toggleSfx, toggleAmbient, nextTrack, prevTrack, playIndex, setVolume, playSfx,
   };
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

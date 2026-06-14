@@ -18,12 +18,21 @@ export class AudioEngine {
   private delay: DelayNode | null = null;
   private noiseBuffer: AudioBuffer | null = null;
 
+  // Ambient bed: synthesized rain + the odd frog croak (no sound files).
+  private ambientGain: GainNode | null = null;
+  private rainSrc: AudioBufferSourceNode | null = null;
+  private rainBuffer: AudioBuffer | null = null;
+  private frogTimer: ReturnType<typeof setTimeout> | null = null;
+  private cricketTimer: ReturnType<typeof setTimeout> | null = null;
+
   private howl: Howl | null = null;
   private trackIndex = 0;
 
   musicOn = false;
   musicVolume = 0.45;
   sfxOn = true;
+  ambientOn = false;
+  ambientVolume = 0.55;
 
   /** Fired whenever the current track or play state changes (for the React UI). */
   onChange: (() => void) | null = null;
@@ -123,6 +132,158 @@ export class AudioEngine {
     }
   }
 
+  // ── Ambient bed: rain + frogsong (synthesized) ────────────────────
+  private ensureAmbient(): AudioContext | null {
+    const ctx = this.ensureCtx();
+    if (!ctx) return null;
+    if (!this.ambientGain) {
+      this.ambientGain = ctx.createGain();
+      this.ambientGain.gain.value = 0;
+      this.ambientGain.connect(ctx.destination);
+      // layered noise buffers for a softer rain bed
+      const len = Math.floor(ctx.sampleRate * 3);
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      let last = 0;
+      for (let i = 0; i < len; i++) {
+        const white = Math.random() * 2 - 1;
+        last = last * 0.96 + white * 0.04;
+        data[i] = last * 1.4 + white * 0.25;
+      }
+      this.rainBuffer = buf;
+    }
+    return ctx;
+  }
+
+  private startRain() {
+    const ctx = this.ctx;
+    if (!ctx || !this.ambientGain || !this.rainBuffer || this.rainSrc) return;
+    const src = ctx.createBufferSource();
+    src.buffer = this.rainBuffer;
+    src.loop = true;
+    const hp = ctx.createBiquadFilter();
+    hp.type = "highpass";
+    hp.frequency.value = 280;
+    const lp = ctx.createBiquadFilter();
+    lp.type = "lowpass";
+    lp.frequency.value = 2200;
+    lp.Q.value = 0.35;
+    const rg = ctx.createGain();
+    rg.gain.value = 0.42;
+    src.connect(hp).connect(lp).connect(rg).connect(this.ambientGain);
+    src.start();
+    this.rainSrc = src;
+  }
+
+  private stopRain() {
+    try { this.rainSrc?.stop(); } catch {}
+    this.rainSrc?.disconnect();
+    this.rainSrc = null;
+  }
+
+  private frogCroak(deep = false) {
+    const ctx = this.ctx;
+    if (!ctx || !this.ambientGain) return;
+    const t0 = ctx.currentTime;
+    const base = deep ? 55 + Math.random() * 35 : 95 + Math.random() * 70;
+    const osc = ctx.createOscillator();
+    osc.type = deep ? "square" : "sawtooth";
+    osc.frequency.setValueAtTime(base, t0);
+    if (!deep) osc.frequency.exponentialRampToValueAtTime(base * 0.82, t0 + 0.18);
+    const bp = ctx.createBiquadFilter();
+    bp.type = "bandpass";
+    bp.frequency.value = base * (deep ? 3.2 : 4.5);
+    bp.Q.value = deep ? 3 : 4;
+    const g = ctx.createGain();
+    g.gain.value = 0.0001;
+    osc.connect(bp).connect(g).connect(this.ambientGain);
+    const pulses = deep ? 3 + Math.floor(Math.random() * 3) : 5 + Math.floor(Math.random() * 5);
+    const step = deep ? 0.07 : 0.05;
+    const peak = deep ? 0.09 : 0.11;
+    for (let i = 0; i < pulses; i++) {
+      const t = t0 + i * step;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(peak, t + 0.012);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + step * 0.85);
+    }
+    osc.start(t0);
+    osc.stop(t0 + pulses * step + 0.1);
+  }
+
+  private cricketChirp() {
+    const ctx = this.ctx;
+    if (!ctx || !this.ambientGain) return;
+    const t0 = ctx.currentTime;
+    const freq = 4200 + Math.random() * 1800;
+    const chirps = 4 + Math.floor(Math.random() * 6);
+    for (let i = 0; i < chirps; i++) {
+      const t = t0 + i * 0.045;
+      const osc = ctx.createOscillator();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq + Math.random() * 400, t);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.035, t + 0.008);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.038);
+      osc.connect(g).connect(this.ambientGain);
+      osc.start(t);
+      osc.stop(t + 0.05);
+    }
+  }
+
+  private scheduleFrog() {
+    if (!this.ambientOn) return;
+    const delay = 1400 + Math.random() * 3800;
+    this.frogTimer = setTimeout(() => {
+      this.frogCroak(Math.random() < 0.35);
+      this.scheduleFrog();
+    }, delay);
+  }
+
+  private scheduleCricket() {
+    if (!this.ambientOn) return;
+    const delay = 900 + Math.random() * 2200;
+    this.cricketTimer = setTimeout(() => {
+      this.cricketChirp();
+      this.scheduleCricket();
+    }, delay);
+  }
+
+  setAmbientOn(on: boolean) {
+    this.ambientOn = on;
+    if (on) {
+      const ctx = this.ensureAmbient();
+      if (!ctx || !this.ambientGain) return;
+      this.startRain();
+      const g = this.ambientGain.gain;
+      g.cancelScheduledValues(ctx.currentTime);
+      g.setValueAtTime(Math.max(g.value, 0.0001), ctx.currentTime);
+      g.linearRampToValueAtTime(this.ambientVolume, ctx.currentTime + 1.4);
+      this.scheduleFrog();
+      this.scheduleCricket();
+    } else {
+      if (this.frogTimer) { clearTimeout(this.frogTimer); this.frogTimer = null; }
+      if (this.cricketTimer) { clearTimeout(this.cricketTimer); this.cricketTimer = null; }
+      if (this.ctx && this.ambientGain) {
+        const ctx = this.ctx;
+        const g = this.ambientGain.gain;
+        g.cancelScheduledValues(ctx.currentTime);
+        g.setValueAtTime(g.value, ctx.currentTime);
+        g.linearRampToValueAtTime(0, ctx.currentTime + 0.6);
+        setTimeout(() => this.stopRain(), 700);
+      } else {
+        this.stopRain();
+      }
+    }
+  }
+
+  setAmbientVolume(v: number) {
+    this.ambientVolume = v;
+    if (this.ambientOn && this.ctx && this.ambientGain) {
+      this.ambientGain.gain.linearRampToValueAtTime(v, this.ctx.currentTime + 0.2);
+    }
+  }
+
   // ── Howler (the music library) ────────────────────────────────────
   private unloadCurrent() {
     if (!this.howl) return;
@@ -201,6 +362,9 @@ export class AudioEngine {
 
   dispose() {
     this.unloadCurrent();
+    if (this.frogTimer) { clearTimeout(this.frogTimer); this.frogTimer = null; }
+    if (this.cricketTimer) { clearTimeout(this.cricketTimer); this.cricketTimer = null; }
+    this.stopRain();
     void this.ctx?.close();
     this.ctx = null;
   }

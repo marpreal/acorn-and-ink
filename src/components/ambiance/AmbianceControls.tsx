@@ -61,6 +61,10 @@ export default function AmbianceControls() {
                 <Wand2 size={18} /> <span>Whispers &amp; chimes</span>
               </Toggle>
 
+              <p className="text-xs" style={{ color: "var(--color-moss-300)" }}>
+                ☁️ Rain &amp; frogsong live on the <strong style={{ color: "var(--color-candle)" }}>cloud</strong>, above the lantern.
+              </p>
+
               <p className="text-xs mt-1" style={{ color: "var(--color-moss-300)" }}>
                 🎶 Forest music lives in the <strong style={{ color: "var(--color-candle)" }}>forest pod</strong>, bottom-left.
               </p>

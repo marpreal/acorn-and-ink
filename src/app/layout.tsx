@@ -4,7 +4,9 @@ import "./globals.css";
 import { AmbianceProvider } from "@/components/ambiance/ambiance-context";
 import Atmosphere from "@/components/atmosphere/Atmosphere";
 import AmbianceControls from "@/components/ambiance/AmbianceControls";
+import GladeRain from "@/components/ambiance/GladeRain";
 import MusicPlayer from "@/components/ambiance/MusicPlayer";
+import RainToggle from "@/components/ambiance/RainToggle";
 
 const uncial = Uncial_Antiqua({ weight: "400", subsets: ["latin"], variable: "--font-uncial", display: "swap" });
 const cormorant = Cormorant_Garamond({ weight: ["500", "600", "700"], subsets: ["latin"], variable: "--font-cormorant", display: "swap" });
@@ -32,7 +34,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="min-h-full">
         <AmbianceProvider>
           <Atmosphere />
+          <GladeRain />
           <div className="relative z-10 min-h-screen flex flex-col">{children}</div>
+          <RainToggle />
           <AmbianceControls />
           <MusicPlayer />
         </AmbianceProvider>
