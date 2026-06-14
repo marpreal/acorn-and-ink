@@ -4,8 +4,8 @@ Acorn & Ink is a normal Next.js app, so the only real setup is a **hosted databa
 
 The project is already prepared for this:
 
-- `prisma/schema.prisma` uses Postgres with `DATABASE_URL` (pooled) + `DIRECT_URL` (direct).
-- `package.json` runs `prisma generate` on install and `prisma migrate deploy` during the build, so the live database is set up automatically on every deploy.
+- Local dev uses `prisma/schema.prisma` (SQLite); Vercel uses `prisma/schema.production.prisma` (Postgres, with `DATABASE_URL` pooled + `DIRECT_URL` direct). Keep the models in the two files identical.
+- The Vercel build (`npm run build`) runs `prisma generate` → `prisma db push` (via `scripts/db-deploy.mjs`) → `next build`, so the live database schema is brought in sync with the code on **every deploy**. Push is additive; a destructive schema change fails the build instead of dropping data.
 
 Follow the steps in order. ☕
 
